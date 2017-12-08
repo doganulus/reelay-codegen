@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+
+import sys
+import antlr4
+import argparse
+
+from reelay import classical
+
+def main(argv):
+
+    parser = argparse.ArgumentParser(description='reelay generates some C++ code that matches the regular expression given', formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument(
+        'pattern', 
+        help='''Expr = a                   (Letter)
+     : Expr1 | Expr2       (Union)
+     : Expr1 ; Expr2       (Concatenation)
+     : Expr1 *             (Zero-or-more Repetition)
+     : Expr1 +             (One-or-more Repetition)
+     : Expr1 ?             (Zero-or-one Repetition)''')
+
+    parser.add_argument(
+        '--with-re2', 
+        action="store_true",
+        help='generate equivalent code using Google\'s RE2 to match')
+
+    args = parser.parse_args()
+
+    pattern = args.pattern
+
+    # Reelay Code Generation
+
+    size, output, trigger = classical.build(pattern)
+    reelay_code = classical.write(size, output, trigger)
+
+    with open('matcher-reelay.cpp', 'w') as f:
+        f.write(reelay_code)
+
+    if args.with_re2:
+        # RE2 Code Generation (DFA and NFA)
+        # NFA generation is forced by reducing max memory. A fragile solution.
+
+        # Syntax adjustments from reelay to RE2 --- using backtracking
+        import re
+        pattern = re.sub(';', '', pattern)     # Concat -> Juxtaposition
+        pattern = re.sub('\(', '(?:', pattern) # Parentheses -> Non-capturing
+        pattern = pattern + '$'                # Work till the end 
+
+        re2_code = """#include <iostream>
+    #include <fstream>
+    #include <re2/re2.h>
+
+    int main(int argc, char **argv) {{
+
+        std::ifstream ifs(argv[1]);
+        std::string word((std::istreambuf_iterator<char>(ifs)),(std::istreambuf_iterator<char>()));
+        std::cout << RE2::PartialMatch(word, "{pattern}") << std::endl;
+
+    }}
+    """.format(pattern=pattern)
+
+        with open('matcher-re2.cpp', 'w') as f:
+            f.write(re2_code)
+
+        # We force NFA matching 
+
+        re2_code = """#include <iostream>
+    #include <fstream>
+    #include <re2/re2.h>
+
+    int main(int argc, char **argv) {{
+
+        std::ifstream ifs(argv[1]);
+        std::string word((std::istreambuf_iterator<char>(ifs)),(std::istreambuf_iterator<char>()));
+
+        RE2::Options opt;
+        opt.set_max_mem({size});
+        RE2 re("{pattern}", opt);
+
+        std::cout << RE2::PartialMatch(word, re) << std::endl;
+
+    }}
+    """.format(pattern=pattern, size=2048)
+
+        with open('matcher-re2-nfa.cpp', 'w') as f:
+            f.write(re2_code)
+
+
+if __name__ == '__main__':
+    main(sys.argv)
