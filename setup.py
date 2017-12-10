@@ -1,9 +1,52 @@
 import os
 import sys
 
+<<<<<<< HEAD
 from distutils.core import setup
 from distutils import util
 
+=======
+from os.path import join
+
+from distutils.core import setup
+from distutils import util
+
+# class build_ext(build_ext):
+
+#     def build_extension(self, ext):
+#         self._ctypes = isinstance(ext, CTypes)
+#         return super().build_extension(ext)
+
+#     def get_export_symbols(self, ext):
+#         if self._ctypes:
+#             return ext.export_symbols
+#         return super().get_export_symbols(ext)
+
+#     def get_ext_filename(self, ext_name):
+#         if self._ctypes:
+#             return ext_name + '.so'
+#         return super().get_ext_filename(ext_name)
+
+# class CTypes(Extension): pass
+
+# module1 = CTypes('libmontre',
+#             define_macros = [ ('MAJOR_VERSION', '0'),
+#                               ('MINOR_VERSION', '6')],
+#             sources = [ join("src", "libmontre", "zone2.cpp"),
+#                         join("src", "libmontre", "zoneset.cpp"),
+#                         join("src", "libmontre", "boolean.cpp"),
+#                         join("src", "libmontre", "interval.cpp"),
+#                         join("src", "libmontre", "temporal.cpp")
+# ],
+#             depends = [ join("src", "libmontre", "zone2.h"),
+#                         join("src", "libmontre", "zoneset.h"),
+#                         join("src", "libmontre", "boolean.h"),
+#                         join("src", "libmontre", "interval.h"),
+#                         join("src", "libmontre", "temporal.h")
+# ],
+#             include_dirs=[join("src", "libmontre")],
+#             extra_compile_args=['-std=c++11'])
+>>>>>>> 08446517424376e9bb59e0404f45fc7fa33b993e
 if __name__ == "__main__":
     path_to_grammar = util.convert_path('reelay/parser')
     setup ( name = 'reelay',
