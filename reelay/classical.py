@@ -193,7 +193,7 @@ class ClassicalCodeGenerator:
         statements.append('\t\tstd::memcpy(state, next_state, sizeof(state));')
         statements.append('\t}')
 
-        output_cond = ' or '.join(['state[{}]'.format(i) for i in output])
+        output_cond = ' or '.join(['next_state[{}]'.format(i) for i in output])
         statements.append('\tstd::cout << ({}) << std::endl;'.format(output_cond))
         statements.append('}')
 
