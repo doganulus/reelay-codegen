@@ -35,6 +35,15 @@ class EreListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by EreParser#Exists.
+    def enterExists(self, ctx:EreParser.ExistsContext):
+        pass
+
+    # Exit a parse tree produced by EreParser#Exists.
+    def exitExists(self, ctx:EreParser.ExistsContext):
+        pass
+
+
     # Enter a parse tree produced by EreParser#Restrict.
     def enterRestrict(self, ctx:EreParser.RestrictContext):
         pass
@@ -104,6 +113,15 @@ class EreListener(ParseTreeListener):
 
     # Exit a parse tree produced by EreParser#atom.
     def exitAtom(self, ctx:EreParser.AtomContext):
+        pass
+
+
+    # Enter a parse tree produced by EreParser#idlist.
+    def enterIdlist(self, ctx:EreParser.IdlistContext):
+        pass
+
+    # Exit a parse tree produced by EreParser#idlist.
+    def exitIdlist(self, ctx:EreParser.IdlistContext):
         pass
 
 

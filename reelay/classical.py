@@ -24,12 +24,17 @@ def build(expression):
 
     return size, output, trigger
 
-def write(size, output, trigger, language='cpp', filename='matcher.cpp'):
+def write(size, output, trigger, language='cpp'):
 
         coder = ClassicalCodeGenerator()
 
+
         if language == 'cpp':
             code = coder.generate_cpp_code(size, output, trigger)
+        elif language == 'python':
+            code = coder.generate_python_code(size, output, trigger)
+            print('Hey')
+
         else:
             raise NotImplementedError 
 
@@ -115,6 +120,26 @@ class ClassicalAnnotator(EreVisitor):
 
         return self.num, ctx.nullable, ctx.output
 
+    # Visit a parse tree produced by EreParser#Grouping.
+    def visitComplement(self, ctx:EreParser.GroupingContext):
+
+        self.visit(ctx.child)
+
+        ctx.nullable = ctx.child.nullable
+        ctx.output = ctx.child.output
+
+        return self.num, ctx.nullable, ctx.output
+
+        # Visit a parse tree produced by EreParser#Grouping.
+    def visitExists(self, ctx:EreParser.GroupingContext):
+
+        self.visit(ctx.child)
+
+        ctx.nullable = ctx.child.nullable
+        ctx.output = ctx.child.output
+
+        return self.num, ctx.nullable, ctx.output
+
 class ClassicalBuilder(EreVisitor):
 
     def __init__(self):
@@ -154,6 +179,10 @@ class ClassicalBuilder(EreVisitor):
     def visitGrouping(self, ctx:EreParser.GroupingContext):
         return self.build(ctx.child, ctx.trigger)
 
+    # Visit a parse tree produced by EreParser#Exists.
+    def visitExists(self, ctx:EreParser.ExistsContext):
+        return self.build(ctx.child, ctx.trigger)
+
     # Visit a parse tree produced by EreParser#Question.
     def visitQuestion(self, ctx:EreParser.QuestionContext):
         return self.build(ctx.child, ctx.child.output | ctx.trigger)
@@ -189,13 +218,31 @@ class ClassicalCodeGenerator:
         for position, letter, trigger in trigger:
             trig_cond = ' or '.join(['state[{}]'.format(i) for i in trigger])
             statements.append('\t\tnext_state[{}] = (letter == \'{}\') and ({});'.format(position, letter, trig_cond))
+            # trig_cond = ', slyvan_or('.join(['next_state[{}]'.format(i) for i in trigger])
+            # statements.append('\t\tnext_state[{}] = (letter == \'{}\') and slyvan_or({}, sylvan_bdd_false{};'.format(position, letter, trig_cond, ')'*len(trigger) ))
+
 
         statements.append('\t\tstd::memcpy(state, next_state, sizeof(state));')
         statements.append('\t}')
 
         output_cond = ' or '.join(['next_state[{}]'.format(i) for i in output])
+
+        # output_cond = ', or('.join(['next_state[{}]'.format(i) for i in output])
         statements.append('\tstd::cout << ({}) << std::endl;'.format(output_cond))
         statements.append('}')
+
+        generated_code = '\n'.join(statements)
+
+        return generated_code
+
+    def generate_python_code(self, size, output, trigger, partial=True):
+        statements = [
+            '#include <iostream>',
+            '#include <fstream>', 
+            '#include <cstring>', 
+            '',
+            'int main(int argc, char **argv) {',            
+            ]
 
         generated_code = '\n'.join(statements)
 

@@ -30,7 +30,7 @@ def main(argv):
     # Reelay Code Generation
 
     size, output, trigger = classical.build(pattern)
-    reelay_code = classical.write(size, output, trigger)
+    reelay_code = classical.write(size, output, trigger, language='cpp')
 
     with open('matcher-reelay.cpp', 'w') as f:
         f.write(reelay_code)

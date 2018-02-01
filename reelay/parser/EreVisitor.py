@@ -24,6 +24,11 @@ class EreVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by EreParser#Exists.
+    def visitExists(self, ctx:EreParser.ExistsContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by EreParser#Restrict.
     def visitRestrict(self, ctx:EreParser.RestrictContext):
         return self.visitChildren(ctx)
@@ -61,6 +66,11 @@ class EreVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by EreParser#atom.
     def visitAtom(self, ctx:EreParser.AtomContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by EreParser#idlist.
+    def visitIdlist(self, ctx:EreParser.IdlistContext):
         return self.visitChildren(ctx)
 
 

@@ -7,23 +7,28 @@ import sys
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\20")
-        buf.write(".\4\2\t\2\4\3\t\3\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\5\2")
-        buf.write("\17\n\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3")
-        buf.write("\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\7\2\'\n\2\f")
-        buf.write("\2\16\2*\13\2\3\3\3\3\3\3\2\3\2\4\2\4\2\2\2\64\2\16\3")
-        buf.write("\2\2\2\4+\3\2\2\2\6\7\b\2\1\2\7\17\5\4\3\2\b\t\7\3\2\2")
-        buf.write("\t\17\5\2\2\13\n\13\7\5\2\2\13\f\5\2\2\2\f\r\7\7\2\2\r")
-        buf.write("\17\3\2\2\2\16\6\3\2\2\2\16\b\3\2\2\2\16\n\3\2\2\2\17")
-        buf.write("(\3\2\2\2\20\21\f\t\2\2\21\22\7\b\2\2\22\'\5\2\2\n\23")
-        buf.write("\24\f\5\2\2\24\25\7\f\2\2\25\'\5\2\2\6\26\27\f\4\2\2\27")
-        buf.write("\30\7\r\2\2\30\'\5\2\2\5\31\32\f\n\2\2\32\33\7\4\2\2\33")
-        buf.write("\34\7\5\2\2\34\35\7\17\2\2\35\36\7\6\2\2\36\37\7\17\2")
-        buf.write("\2\37\'\7\7\2\2 !\f\b\2\2!\'\7\t\2\2\"#\f\7\2\2#\'\7\n")
-        buf.write("\2\2$%\f\6\2\2%\'\7\13\2\2&\20\3\2\2\2&\23\3\2\2\2&\26")
-        buf.write("\3\2\2\2&\31\3\2\2\2& \3\2\2\2&\"\3\2\2\2&$\3\2\2\2\'")
-        buf.write("*\3\2\2\2(&\3\2\2\2()\3\2\2\2)\3\3\2\2\2*(\3\2\2\2+,\7")
-        buf.write("\16\2\2,\5\3\2\2\2\5\16&(")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\23")
+        buf.write("<\4\2\t\2\4\3\t\3\4\4\t\4\3\2\3\2\3\2\3\2\3\2\3\2\3\2")
+        buf.write("\3\2\3\2\3\2\3\2\3\2\3\2\5\2\26\n\2\3\2\3\2\3\2\3\2\3")
+        buf.write("\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2")
+        buf.write("\3\2\3\2\3\2\7\2-\n\2\f\2\16\2\60\13\2\3\3\3\3\3\4\3\4")
+        buf.write("\3\4\7\4\67\n\4\f\4\16\4:\13\4\3\4\2\3\2\5\2\4\6\2\2\2")
+        buf.write("C\2\25\3\2\2\2\4\61\3\2\2\2\6\63\3\2\2\2\b\t\b\2\1\2\t")
+        buf.write("\26\5\4\3\2\n\13\7\3\2\2\13\f\5\6\4\2\f\r\7\4\2\2\r\16")
+        buf.write("\5\2\2\f\16\26\3\2\2\2\17\20\7\5\2\2\20\26\5\2\2\13\21")
+        buf.write("\22\7\17\2\2\22\23\5\2\2\2\23\24\7\20\2\2\24\26\3\2\2")
+        buf.write("\2\25\b\3\2\2\2\25\n\3\2\2\2\25\17\3\2\2\2\25\21\3\2\2")
+        buf.write("\2\26.\3\2\2\2\27\30\f\t\2\2\30\31\7\t\2\2\31-\5\2\2\n")
+        buf.write("\32\33\f\5\2\2\33\34\7\r\2\2\34-\5\2\2\6\35\36\f\4\2\2")
+        buf.write("\36\37\7\16\2\2\37-\5\2\2\5 !\f\n\2\2!\"\7\6\2\2\"#\7")
+        buf.write("\22\2\2#$\7\7\2\2$%\7\22\2\2%-\7\b\2\2&\'\f\b\2\2\'-\7")
+        buf.write("\n\2\2()\f\7\2\2)-\7\13\2\2*+\f\6\2\2+-\7\f\2\2,\27\3")
+        buf.write("\2\2\2,\32\3\2\2\2,\35\3\2\2\2, \3\2\2\2,&\3\2\2\2,(\3")
+        buf.write("\2\2\2,*\3\2\2\2-\60\3\2\2\2.,\3\2\2\2./\3\2\2\2/\3\3")
+        buf.write("\2\2\2\60.\3\2\2\2\61\62\7\21\2\2\62\5\3\2\2\2\638\7\21")
+        buf.write("\2\2\64\65\7\7\2\2\65\67\7\21\2\2\66\64\3\2\2\2\67:\3")
+        buf.write("\2\2\28\66\3\2\2\289\3\2\2\29\7\3\2\2\2:8\3\2\2\2\6\25")
+        buf.write(",.8")
         return buf.getvalue()
 
 
@@ -37,18 +42,21 @@ class EreParser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "'~'", "'%'", "'('", "','", "')'", "'&'", 
-                     "'*'", "'+'", "'?'", "';'", "'|'" ]
+    literalNames = [ "<INVALID>", "'exists'", "'.'", "'~'", "'{'", "','", 
+                     "'}'", "'&'", "'*'", "'+'", "'?'", "';'", "'|'", "'('", 
+                     "')'" ]
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                      "IDENTIFIER", "NUMBER", "WS" ]
+                      "<INVALID>", "<INVALID>", "<INVALID>", "IDENTIFIER", 
+                      "NUMBER", "WS" ]
 
     RULE_expr = 0
     RULE_atom = 1
+    RULE_idlist = 2
 
-    ruleNames =  [ "expr", "atom" ]
+    ruleNames =  [ "expr", "atom", "idlist" ]
 
     EOF = Token.EOF
     T__0=1
@@ -62,9 +70,12 @@ class EreParser ( Parser ):
     T__8=9
     T__9=10
     T__10=11
-    IDENTIFIER=12
-    NUMBER=13
-    WS=14
+    T__11=12
+    T__12=13
+    T__13=14
+    IDENTIFIER=15
+    NUMBER=16
+    WS=17
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -171,6 +182,36 @@ class EreParser ( Parser ):
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitStar" ):
                 return visitor.visitStar(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExistsContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EreParser.ExprContext
+            super().__init__(parser)
+            self.variables = None # IdlistContext
+            self.child = None # ExprContext
+            self.copyFrom(ctx)
+
+        def idlist(self):
+            return self.getTypedRuleContext(EreParser.IdlistContext,0)
+
+        def expr(self):
+            return self.getTypedRuleContext(EreParser.ExprContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExists" ):
+                listener.enterExists(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExists" ):
+                listener.exitExists(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExists" ):
+                return visitor.visitExists(self)
             else:
                 return visitor.visitChildren(self)
 
@@ -378,7 +419,7 @@ class EreParser ( Parser ):
         self.enterRecursionRule(localctx, 0, self.RULE_expr, _p)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 12
+            self.state = 19
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [EreParser.IDENTIFIER]:
@@ -386,34 +427,47 @@ class EreParser ( Parser ):
                 self._ctx = localctx
                 _prevctx = localctx
 
-                self.state = 5
+                self.state = 7
                 localctx.child = self.atom()
                 pass
             elif token in [EreParser.T__0]:
-                localctx = EreParser.ComplementContext(self, localctx)
-                self._ctx = localctx
-                _prevctx = localctx
-                self.state = 6
-                self.match(EreParser.T__0)
-                self.state = 7
-                localctx.child = self.expr(9)
-                pass
-            elif token in [EreParser.T__2]:
-                localctx = EreParser.GroupingContext(self, localctx)
+                localctx = EreParser.ExistsContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
                 self.state = 8
-                self.match(EreParser.T__2)
+                self.match(EreParser.T__0)
                 self.state = 9
-                localctx.child = self.expr(0)
+                localctx.variables = self.idlist()
                 self.state = 10
-                self.match(EreParser.T__4)
+                self.match(EreParser.T__1)
+                self.state = 11
+                localctx.child = self.expr(10)
+                pass
+            elif token in [EreParser.T__2]:
+                localctx = EreParser.ComplementContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
+                self.state = 13
+                self.match(EreParser.T__2)
+                self.state = 14
+                localctx.child = self.expr(9)
+                pass
+            elif token in [EreParser.T__12]:
+                localctx = EreParser.GroupingContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
+                self.state = 15
+                self.match(EreParser.T__12)
+                self.state = 16
+                localctx.child = self.expr(0)
+                self.state = 17
+                self.match(EreParser.T__13)
                 pass
             else:
                 raise NoViableAltException(self)
 
             self._ctx.stop = self._input.LT(-1)
-            self.state = 38
+            self.state = 44
             self._errHandler.sync(self)
             _alt = self._interp.adaptivePredict(self._input,2,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
@@ -421,20 +475,20 @@ class EreParser ( Parser ):
                     if self._parseListeners is not None:
                         self.triggerExitRuleEvent()
                     _prevctx = localctx
-                    self.state = 36
+                    self.state = 42
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,1,self._ctx)
                     if la_ == 1:
                         localctx = EreParser.IntersectContext(self, EreParser.ExprContext(self, _parentctx, _parentState))
                         localctx.left = _prevctx
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 14
+                        self.state = 21
                         if not self.precpred(self._ctx, 7):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 7)")
-                        self.state = 15
-                        self.match(EreParser.T__5)
-                        self.state = 16
+                        self.state = 22
+                        self.match(EreParser.T__6)
+                        self.state = 23
                         localctx.right = self.expr(8)
                         pass
 
@@ -442,13 +496,13 @@ class EreParser ( Parser ):
                         localctx = EreParser.ConcatContext(self, EreParser.ExprContext(self, _parentctx, _parentState))
                         localctx.left = _prevctx
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 17
+                        self.state = 24
                         if not self.precpred(self._ctx, 3):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 3)")
-                        self.state = 18
-                        self.match(EreParser.T__9)
-                        self.state = 19
+                        self.state = 25
+                        self.match(EreParser.T__10)
+                        self.state = 26
                         localctx.right = self.expr(4)
                         pass
 
@@ -456,13 +510,13 @@ class EreParser ( Parser ):
                         localctx = EreParser.UnionContext(self, EreParser.ExprContext(self, _parentctx, _parentState))
                         localctx.left = _prevctx
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 20
+                        self.state = 27
                         if not self.precpred(self._ctx, 2):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 2)")
-                        self.state = 21
-                        self.match(EreParser.T__10)
-                        self.state = 22
+                        self.state = 28
+                        self.match(EreParser.T__11)
+                        self.state = 29
                         localctx.right = self.expr(3)
                         pass
 
@@ -470,62 +524,60 @@ class EreParser ( Parser ):
                         localctx = EreParser.RestrictContext(self, EreParser.ExprContext(self, _parentctx, _parentState))
                         localctx.left = _prevctx
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 23
+                        self.state = 30
                         if not self.precpred(self._ctx, 8):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 8)")
-                        self.state = 24
-                        self.match(EreParser.T__1)
-                        self.state = 25
-                        self.match(EreParser.T__2)
-                        self.state = 26
-                        localctx.min_val = self.match(EreParser.NUMBER)
-                        self.state = 27
+                        self.state = 31
                         self.match(EreParser.T__3)
-                        self.state = 28
-                        localctx.max_val = self.match(EreParser.NUMBER)
-                        self.state = 29
+                        self.state = 32
+                        localctx.min_val = self.match(EreParser.NUMBER)
+                        self.state = 33
                         self.match(EreParser.T__4)
+                        self.state = 34
+                        localctx.max_val = self.match(EreParser.NUMBER)
+                        self.state = 35
+                        self.match(EreParser.T__5)
                         pass
 
                     elif la_ == 5:
                         localctx = EreParser.StarContext(self, EreParser.ExprContext(self, _parentctx, _parentState))
                         localctx.child = _prevctx
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 30
+                        self.state = 36
                         if not self.precpred(self._ctx, 6):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 6)")
-                        self.state = 31
-                        self.match(EreParser.T__6)
+                        self.state = 37
+                        self.match(EreParser.T__7)
                         pass
 
                     elif la_ == 6:
                         localctx = EreParser.PlusContext(self, EreParser.ExprContext(self, _parentctx, _parentState))
                         localctx.child = _prevctx
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 32
+                        self.state = 38
                         if not self.precpred(self._ctx, 5):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 5)")
-                        self.state = 33
-                        self.match(EreParser.T__7)
+                        self.state = 39
+                        self.match(EreParser.T__8)
                         pass
 
                     elif la_ == 7:
                         localctx = EreParser.QuestionContext(self, EreParser.ExprContext(self, _parentctx, _parentState))
                         localctx.child = _prevctx
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 34
+                        self.state = 40
                         if not self.precpred(self._ctx, 4):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 4)")
-                        self.state = 35
-                        self.match(EreParser.T__8)
+                        self.state = 41
+                        self.match(EreParser.T__9)
                         pass
 
              
-                self.state = 40
+                self.state = 46
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,2,self._ctx)
 
@@ -572,8 +624,69 @@ class EreParser ( Parser ):
         self.enterRule(localctx, 2, self.RULE_atom)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 41
+            self.state = 47
             self.match(EreParser.IDENTIFIER)
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.exitRule()
+        return localctx
+
+    class IdlistContext(ParserRuleContext):
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+        def IDENTIFIER(self, i:int=None):
+            if i is None:
+                return self.getTokens(EreParser.IDENTIFIER)
+            else:
+                return self.getToken(EreParser.IDENTIFIER, i)
+
+        def getRuleIndex(self):
+            return EreParser.RULE_idlist
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterIdlist" ):
+                listener.enterIdlist(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitIdlist" ):
+                listener.exitIdlist(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitIdlist" ):
+                return visitor.visitIdlist(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+
+
+    def idlist(self):
+
+        localctx = EreParser.IdlistContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 4, self.RULE_idlist)
+        self._la = 0 # Token type
+        try:
+            self.enterOuterAlt(localctx, 1)
+            self.state = 49
+            self.match(EreParser.IDENTIFIER)
+            self.state = 54
+            self._errHandler.sync(self)
+            _la = self._input.LA(1)
+            while _la==EreParser.T__4:
+                self.state = 50
+                self.match(EreParser.T__4)
+                self.state = 51
+                self.match(EreParser.IDENTIFIER)
+                self.state = 56
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
+
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
