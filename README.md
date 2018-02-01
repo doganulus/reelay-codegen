@@ -102,13 +102,13 @@ and can evaluate it in place as follows.
 
 Now you can see that `out` is `True` at a position if there exists a sequence of `p1` is True, then `p2` is True, and then `p1` is True. Thus we found the endpoint of the pattern given. This behavior is standard for pattern matchers.
 
-Moreover, you can define custom predicate over Boolean and numerical variables. For that you need to pass your predicate as a local dictionary:
+Moreover, you can define custom predicates over Boolean and numerical variables. For that you need to pass your predicate as a local dictionary:
 
     def my_predicate(a, b):
         return (a or b)    
 
     df = regexp.eval(df, 'my_predicate(p1, p2); p2', inplace=True, local_dict={'my_predicate' : my_predicate})
 
-This regular expression matches a sequence where `p1` or `p2` holds and then `p2` hold at the next step.
+This regular expression matches a sequence where `p1` or `p2` holds and then `p2` holds at the next row.
 
 
