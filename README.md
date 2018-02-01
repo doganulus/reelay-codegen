@@ -66,13 +66,13 @@ Consider a pandas DataFrame with Boolean columns.
         }
     df = pd.DataFrame(data=d)
 
-Similar to pandas' arithmetic expression functionality over data frames, we would like evaluate regular expression such as  
+Similar to pandas' arithmetic expression functionality over data frames, we would like evaluate regular expressions such as  
 
     expression = 'p1;p2;p1'
 
-which species a pattern of `p1`, `p2`, `p1` holds sequentially. The operator `;` denotes concatenation. All other regular operators described above are supported.
+which specifies a pattern of `p1`, `p2`, and `p1` hold sequentially. The operator `;` denotes concatenation. All other regular operators described above are supported.
 
-We evaluate this expression over a data frame as follows:
+We evaluate this expression over the data frame `df` as follows:
 
     df = regexp.eval(df, expression)
 
