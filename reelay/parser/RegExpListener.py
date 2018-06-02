@@ -17,30 +17,12 @@ class RegExpListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by RegExpParser#Concat.
-    def enterConcat(self, ctx:RegExpParser.ConcatContext):
+    # Enter a parse tree produced by RegExpParser#Intersection.
+    def enterIntersection(self, ctx:RegExpParser.IntersectionContext):
         pass
 
-    # Exit a parse tree produced by RegExpParser#Concat.
-    def exitConcat(self, ctx:RegExpParser.ConcatContext):
-        pass
-
-
-    # Enter a parse tree produced by RegExpParser#Star.
-    def enterStar(self, ctx:RegExpParser.StarContext):
-        pass
-
-    # Exit a parse tree produced by RegExpParser#Star.
-    def exitStar(self, ctx:RegExpParser.StarContext):
-        pass
-
-
-    # Enter a parse tree produced by RegExpParser#True.
-    def enterTrue(self, ctx:RegExpParser.TrueContext):
-        pass
-
-    # Exit a parse tree produced by RegExpParser#True.
-    def exitTrue(self, ctx:RegExpParser.TrueContext):
+    # Exit a parse tree produced by RegExpParser#Intersection.
+    def exitIntersection(self, ctx:RegExpParser.IntersectionContext):
         pass
 
 
@@ -62,12 +44,84 @@ class RegExpListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by RegExpParser#Union.
+    def enterUnion(self, ctx:RegExpParser.UnionContext):
+        pass
+
+    # Exit a parse tree produced by RegExpParser#Union.
+    def exitUnion(self, ctx:RegExpParser.UnionContext):
+        pass
+
+
+    # Enter a parse tree produced by RegExpParser#Concatenation.
+    def enterConcatenation(self, ctx:RegExpParser.ConcatenationContext):
+        pass
+
+    # Exit a parse tree produced by RegExpParser#Concatenation.
+    def exitConcatenation(self, ctx:RegExpParser.ConcatenationContext):
+        pass
+
+
+    # Enter a parse tree produced by RegExpParser#Star.
+    def enterStar(self, ctx:RegExpParser.StarContext):
+        pass
+
+    # Exit a parse tree produced by RegExpParser#Star.
+    def exitStar(self, ctx:RegExpParser.StarContext):
+        pass
+
+
+    # Enter a parse tree produced by RegExpParser#Exists.
+    def enterExists(self, ctx:RegExpParser.ExistsContext):
+        pass
+
+    # Exit a parse tree produced by RegExpParser#Exists.
+    def exitExists(self, ctx:RegExpParser.ExistsContext):
+        pass
+
+
+    # Enter a parse tree produced by RegExpParser#RestrictGT.
+    def enterRestrictGT(self, ctx:RegExpParser.RestrictGTContext):
+        pass
+
+    # Exit a parse tree produced by RegExpParser#RestrictGT.
+    def exitRestrictGT(self, ctx:RegExpParser.RestrictGTContext):
+        pass
+
+
+    # Enter a parse tree produced by RegExpParser#Restrict.
+    def enterRestrict(self, ctx:RegExpParser.RestrictContext):
+        pass
+
+    # Exit a parse tree produced by RegExpParser#Restrict.
+    def exitRestrict(self, ctx:RegExpParser.RestrictContext):
+        pass
+
+
+    # Enter a parse tree produced by RegExpParser#Complementation.
+    def enterComplementation(self, ctx:RegExpParser.ComplementationContext):
+        pass
+
+    # Exit a parse tree produced by RegExpParser#Complementation.
+    def exitComplementation(self, ctx:RegExpParser.ComplementationContext):
+        pass
+
+
     # Enter a parse tree produced by RegExpParser#Question.
     def enterQuestion(self, ctx:RegExpParser.QuestionContext):
         pass
 
     # Exit a parse tree produced by RegExpParser#Question.
     def exitQuestion(self, ctx:RegExpParser.QuestionContext):
+        pass
+
+
+    # Enter a parse tree produced by RegExpParser#RestrictLT.
+    def enterRestrictLT(self, ctx:RegExpParser.RestrictLTContext):
+        pass
+
+    # Exit a parse tree produced by RegExpParser#RestrictLT.
+    def exitRestrictLT(self, ctx:RegExpParser.RestrictLTContext):
         pass
 
 
@@ -80,12 +134,21 @@ class RegExpListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by RegExpParser#Union.
-    def enterUnion(self, ctx:RegExpParser.UnionContext):
+    # Enter a parse tree produced by RegExpParser#VarConst.
+    def enterVarConst(self, ctx:RegExpParser.VarConstContext):
         pass
 
-    # Exit a parse tree produced by RegExpParser#Union.
-    def exitUnion(self, ctx:RegExpParser.UnionContext):
+    # Exit a parse tree produced by RegExpParser#VarConst.
+    def exitVarConst(self, ctx:RegExpParser.VarConstContext):
+        pass
+
+
+    # Enter a parse tree produced by RegExpParser#VarBind.
+    def enterVarBind(self, ctx:RegExpParser.VarBindContext):
+        pass
+
+    # Exit a parse tree produced by RegExpParser#VarBind.
+    def exitVarBind(self, ctx:RegExpParser.VarBindContext):
         pass
 
 
@@ -104,6 +167,24 @@ class RegExpListener(ParseTreeListener):
 
     # Exit a parse tree produced by RegExpParser#Pred.
     def exitPred(self, ctx:RegExpParser.PredContext):
+        pass
+
+
+    # Enter a parse tree produced by RegExpParser#Constant.
+    def enterConstant(self, ctx:RegExpParser.ConstantContext):
+        pass
+
+    # Exit a parse tree produced by RegExpParser#Constant.
+    def exitConstant(self, ctx:RegExpParser.ConstantContext):
+        pass
+
+
+    # Enter a parse tree produced by RegExpParser#AtomList.
+    def enterAtomList(self, ctx:RegExpParser.AtomListContext):
+        pass
+
+    # Exit a parse tree produced by RegExpParser#AtomList.
+    def exitAtomList(self, ctx:RegExpParser.AtomListContext):
         pass
 
 

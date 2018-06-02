@@ -14,18 +14,8 @@ class RegExpVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by RegExpParser#Concat.
-    def visitConcat(self, ctx:RegExpParser.ConcatContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by RegExpParser#Star.
-    def visitStar(self, ctx:RegExpParser.StarContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by RegExpParser#True.
-    def visitTrue(self, ctx:RegExpParser.TrueContext):
+    # Visit a parse tree produced by RegExpParser#Intersection.
+    def visitIntersection(self, ctx:RegExpParser.IntersectionContext):
         return self.visitChildren(ctx)
 
 
@@ -39,8 +29,48 @@ class RegExpVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by RegExpParser#Union.
+    def visitUnion(self, ctx:RegExpParser.UnionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by RegExpParser#Concatenation.
+    def visitConcatenation(self, ctx:RegExpParser.ConcatenationContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by RegExpParser#Star.
+    def visitStar(self, ctx:RegExpParser.StarContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by RegExpParser#Exists.
+    def visitExists(self, ctx:RegExpParser.ExistsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by RegExpParser#RestrictGT.
+    def visitRestrictGT(self, ctx:RegExpParser.RestrictGTContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by RegExpParser#Restrict.
+    def visitRestrict(self, ctx:RegExpParser.RestrictContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by RegExpParser#Complementation.
+    def visitComplementation(self, ctx:RegExpParser.ComplementationContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by RegExpParser#Question.
     def visitQuestion(self, ctx:RegExpParser.QuestionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by RegExpParser#RestrictLT.
+    def visitRestrictLT(self, ctx:RegExpParser.RestrictLTContext):
         return self.visitChildren(ctx)
 
 
@@ -49,8 +79,13 @@ class RegExpVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by RegExpParser#Union.
-    def visitUnion(self, ctx:RegExpParser.UnionContext):
+    # Visit a parse tree produced by RegExpParser#VarConst.
+    def visitVarConst(self, ctx:RegExpParser.VarConstContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by RegExpParser#VarBind.
+    def visitVarBind(self, ctx:RegExpParser.VarBindContext):
         return self.visitChildren(ctx)
 
 
@@ -61,6 +96,16 @@ class RegExpVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by RegExpParser#Pred.
     def visitPred(self, ctx:RegExpParser.PredContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by RegExpParser#Constant.
+    def visitConstant(self, ctx:RegExpParser.ConstantContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by RegExpParser#AtomList.
+    def visitAtomList(self, ctx:RegExpParser.AtomListContext):
         return self.visitChildren(ctx)
 
 
