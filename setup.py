@@ -5,23 +5,26 @@ from distutils.core import setup
 from distutils import util
 
 if __name__ == "__main__":
-    path_to_parser = util.convert_path('reelay/parser')
-    path_to_pandas = util.convert_path('reelay/parser')
+
     setup ( name = 'reelay',
-            version='0.0.2',
+            version='0.1.0',
             author='Dogan Ulus',
             author_email='doganulus@gmail.com',
             url='http://github.com/doganulus/reelay/',
             package_dir = {
                 'reelay': 'reelay',
-                'reelay.parser': path_to_parser,
-                'reelay.parser': path_to_pandas},
+                'reelay.parser': util.convert_path('reelay/parser'),
+                'reelay.target': util.convert_path('reelay/target'),
+                'reelay.machine': util.convert_path('reelay/machine')
+                'reelay.formal': util.convert_path('reelay/formal')},
             packages=[
                 "reelay",
                 "reelay.parser",
-                "reelay.pandas" 
+                "reelay.target",
+                "reelay.machine",
+                "reelay.formal" 
             ],
-            scripts=['bin/re2cpp'],
+            scripts=['scripts/reg2cpp', 'scripts/ptl2cpp'],
             license='GPLv3+',
             classifiers=[
                 'Development Status :: 3 - Alpha',
@@ -32,12 +35,10 @@ if __name__ == "__main__":
                 'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
                 'Programming Language :: Python :: 3',
             ],
-            description = 'An experimental package to generate sequential machines from formal specifications such as regular expressions',
+            description = 'Reelay is an online monitor generator from regular expressions and temporal logic based on sequential networks.',
             # url='http://pypi.python.org/pypi/reelay/',
-            # py_modules = ["reelay.classical"],
             python_requires='>=3',
             install_requires=[
-                'pandas',
                 'antlr4-python3-runtime'
             ],
             include_package_data=True,
