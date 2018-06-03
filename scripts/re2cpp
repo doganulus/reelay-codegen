@@ -1,0 +1,62 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import antlr4
+import argparse
+
+from reelay.formal.regexp import RegExpBuilder as Builder
+from reelay.target.cpp import StructGenerator
+
+def main(argv):
+
+    parser = argparse.ArgumentParser(description='reelay generates some C++ code that matches the regular expression given', formatter_class=argparse.RawTextHelpFormatter)
+
+    parser.add_argument(
+        'pattern', 
+        help='''Expr = a                   (Letter)
+     : Expr1 | Expr2       (Union)
+     : Expr1 ; Expr2       (Concatenation)
+     : Expr1 *             (Zero-or-more Repetition)
+     : Expr1 +             (One-or-more Repetition)
+     : Expr1 ?             (Zero-or-one Repetition)''')
+
+    parser.add_argument(
+        '--with-headers', 
+        action="store_true",
+        help='Generate required header files as well',
+        default=False
+        )
+
+    parser.add_argument(
+        '-o',
+        '--output',
+        help='Specify the output directory',
+        default=''
+        )
+
+    # Args processing
+
+    args = parser.parse_args()
+    expr = args.pattern
+    outdir = args.output
+
+    # Code Generation
+
+    builder = Builder()
+    states, meta = builder.build(expr)
+    
+    coder = StructGenerator()
+    code = coder.generate(states, meta)
+
+    # Code Write
+
+    filename = os.path.join(outdir, 'Monitor{}.hpp'.format(meta['name']))
+    with open(filename, 'w') as f:
+        f.write(code)
+
+    if args.with_headers:
+        pass
+
+if __name__ == '__main__':
+    main(sys.argv)

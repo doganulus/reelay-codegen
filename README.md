@@ -1,10 +1,10 @@
 # reelay
 
-`reelay` is a `C++` code generator for monitoring, inspecting, and analyzing sequential data in an online fashion. `reelay` allows developers to monitor high-level (formal) patterns for their applications without being an expert in the theory. `reelay` supports several pattern specification languages (variants of regular expressions and temporal logic) and its potential applications include real-time data analytics and robotics.
+`reelay` is a `C++` code generator for monitoring, pattern matching, and analyzing temporal data streams on-the-fly. `reelay` allows developers to monitor high-level (formal) patterns for their applications in an efficient and effortless way. `reelay` supports several popular pattern specification languages, namely regular expressions, temporal logic, and their variants. Potential application areas include real-time data analytics and robotics.
 
 # install
 
-This package requires `python3` and `antlr4-python3-runtime`.
+`reelay` requires `python3` and `antlr4-python3-runtime` for code generation.
 
 The easiest way to install `reelay` is to run the following command (that requires `git` installed in your system). 
 
@@ -14,12 +14,12 @@ The easiest way to install `reelay` is to run the following command (that requir
 
 `reelay` has a command-line script `reelay` to generate a `C++` class that corresponds to the specification.
 
-reelay [-h] [--reg] [--tl] [--with-headers] PATTERN
+reelay [-h] [--re] [--tl] [--with-headers] PATTERN
 
 Optional Arguments:
 
     -h              show the help message
-    --reg           generate code from regular expression pattern
+    --re            generate code from regular expression pattern
     --tl            generate code from temporal logic pattern
     --with-headers  generate code with required headers
 
