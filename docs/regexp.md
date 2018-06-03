@@ -12,5 +12,6 @@ Regular Expression Syntax:
          :: FuncName(Arg1,...,Argn) (Predicate / Boolean valued function)
 
     Arg  == ArgName                 (Boolean argument)
-         == ArgName : ArgType       (Other typed argument)
+         :: ArgName : ArgType       (Other typed argument)
 
+Example Patterns:

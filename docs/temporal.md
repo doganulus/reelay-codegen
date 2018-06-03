@@ -31,3 +31,5 @@ Temporal Logic Syntax:
 
     Arg  == ArgName                 (Boolean argument)
          == ArgName : ArgType       (Other typed argument)
+
+Example Patterns:

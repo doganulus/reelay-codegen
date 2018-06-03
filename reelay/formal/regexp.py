@@ -225,11 +225,11 @@ class RegExpBuilder(RegExpVisitor):
     def visitStar(self, ctx:RegExpParser.StarContext):
         self.visit_with(ctx.child, BooleanOr(ctx.child.prev_output, ctx.trigger))
 
-    def visitPlus(self, ctx:RegExpParser.StarContext):
+    def visitPlus(self, ctx:RegExpParser.PlusContext):
         self.visit_with(ctx.child, BooleanOr(ctx.child.prev_output, ctx.trigger))
 
-    def visitPlus(self, ctx:RegExpParser.StarContext):
-        self.visit_with(ctx.child, BooleanOr(ctx.child.prev_output, ctx.trigger))
+    def visitQuestion(self, ctx:RegExpParser.QuestionContext):
+        self.visit_with(ctx.child, ctx.trigger)
 
     def visitIntersection(self, ctx:RegExpParser.IntersectionContext):
         self.visit_with(ctx.left, ctx.trigger)

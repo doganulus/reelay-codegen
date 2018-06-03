@@ -5,14 +5,14 @@ class Expr(object):
         super().__init__()
         self.children = []
 
-# class Atom(object):
-#     """docstring for Atom"""
-#     def __init__(self, name, dtype=None, args=[], nullable=False):
-#         super().__init__()
-#         self.name = name
-#         self.dtype = dtype
-#         self.args = args
-#         self.output = self
+class Atom(object):
+    """docstring for Atom"""
+    def __init__(self, name, dtype=None, args=[], nullable=False):
+        super().__init__()
+        self.name = name
+        self.dtype = dtype
+        self.args = args
+        self.output = self
 
 # class Or(Expr):
 #     """docstring for Atomic"""

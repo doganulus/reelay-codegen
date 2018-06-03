@@ -20,7 +20,7 @@ class StructGenerator(Visitor):
         self.pre = self.now + '_pre'
         self.tpre = self.tnow + '_pre'
 
-        self.include = ["array", "reelay/common.h", "reelay/discrete_time.h"] + include
+        self.include = ["array", "common.hpp", "discrete_time.hpp"] + include
 
     def generate(self, states=None, meta=None):
 
@@ -52,7 +52,7 @@ class StructGenerator(Visitor):
         #     self.statements.append("\t{} {};".format(vartype, varname))
         # self.statements.append('')
 
-        self.statements.append('\tvoid update({})'.format(', '.join(['{} {}'.format(v[0], v[1]) for v in meta['vars']])) + '{') 
+        self.statements.append('\tvoid update({})'.format(', '.join(['{} {}'.format(v[0], v[1]) for v in sorted(meta['vars'])])) + '{') 
 
         self.statements.append('')
         
