@@ -14,7 +14,7 @@ struct MonitorExpr {
 		now = now + 1;
 		tstates_pre = tstates;
 
-		tstates[0] = update_timed_since_unbounded(tstates[0], true, not(lt(yaw,2.4)), 40, now);
+		tstates[0] = update_timed_since_unbounded(tstates[0], true, not(lt(yaw,5.5)), 40, now);
 	}
 
 	bool output(){
