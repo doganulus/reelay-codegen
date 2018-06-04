@@ -10,9 +10,9 @@ expr : child=binded_atom                          # Atomic
      | child=expr '?'                             # Question
      | left=expr ';' right=expr                   # Concatenation
      | left=expr '&' right=expr                   # Intersection
-     | child=expr '[' '<=' u=NUMBER ']'           # RestrictLT
-     | child=expr '[' '>=' l=NUMBER ']'           # RestrictGT
-     | child=expr '[' l=NUMBER ',' u=NUMBER ']'   # Restrict
+     | child=expr '[' '<=' u=NATURAL ']'          # RestrictLT
+     | child=expr '[' '>=' l=NATURAL ']'          # RestrictGT
+     | child=expr '[' l=NATURAL ',' u=NATURAL ']' # Restrict
      | left=expr '|' right=expr                   # Union
      | '(' child=expr ')'                         # Grouping
      ;
@@ -23,7 +23,7 @@ binded_atom : child=atom                         # VarConst
 
 atom : name=(TYPEDVAR | IDENTIFIER)                    # Prop
      | name=(TYPEDVAR | IDENTIFIER) '(' args=alist ')' # Pred
-     | NUMBER                                          # Constant
+     | CONSTANT                                        # Constant
      ;
 
 alist : atom (',' atom)*                # AtomList
@@ -33,12 +33,37 @@ idlist : IDENTIFIER (',' IDENTIFIER)*;
 
 IDENTIFIER : [a-zA-Z][_a-zA-Z0-9]*;
 
-TYPEDVAR : IDENTIFIER ':' ('bool' | 'int' | 'float' | 'string'); 
+TYPEDVAR : IDENTIFIER ':' ('bool' | 'int' | 'float' | 'double' | 'string'); 
 
+CONSTANT
+    :   NATURAL
+    |   FLOATING
+    ;
 
-NUMBER: DIGIT | (DIGIT_NOT_ZERO DIGIT+);
+NATURAL
+    :   DIGIT_NOT_ZERO DIGIT*
+    ;
+
+FLOATING
+    :   FRACTIONALCONSTANT EXPONENTPART?
+    |   DIGITSEQUENCE EXPONENTPART 
+    ;
+
+fragment
+FRACTIONALCONSTANT
+    :   DIGITSEQUENCE? '.' DIGITSEQUENCE
+    |   DIGITSEQUENCE '.'
+    ;
+
+fragment
+EXPONENTPART
+    :   'e' SIGN? DIGITSEQUENCE
+    |   'E' SIGN? DIGITSEQUENCE
+    ;
+
+fragment SIGN : '+' | '-';
+fragment DIGITSEQUENCE : DIGIT+;
+fragment DIGIT : ('0'..'9');
+fragment DIGIT_NOT_ZERO : ('1'..'9');
 
 WS: [ \r\n\t]+ -> channel (HIDDEN);
-
-fragment DIGIT: ('0'..'9');
-fragment DIGIT_NOT_ZERO: ('1'..'9');

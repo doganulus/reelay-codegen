@@ -7,7 +7,7 @@ import sys
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\30")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\32")
         buf.write("h\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\3\2")
         buf.write("\3\2\5\2\21\n\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3")
         buf.write("\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3#\n\3\3\3\3\3\3\3\3\3\3")
@@ -28,9 +28,9 @@ def serializedATN():
         buf.write("\b\2\2()\7\f\2\2)D\5\4\3\t*+\f\4\2\2+,\7\22\2\2,D\5\4")
         buf.write("\3\5-.\f\f\2\2.D\7\b\2\2/\60\f\13\2\2\60D\7\t\2\2\61\62")
         buf.write("\f\n\2\2\62D\7\n\2\2\63\64\f\7\2\2\64\65\7\r\2\2\65\66")
-        buf.write("\7\16\2\2\66\67\7\27\2\2\67D\7\17\2\289\f\6\2\29:\7\r")
-        buf.write("\2\2:;\7\20\2\2;<\7\27\2\2<D\7\17\2\2=>\f\5\2\2>?\7\r")
-        buf.write("\2\2?@\7\27\2\2@A\7\21\2\2AB\7\27\2\2BD\7\17\2\2C$\3\2")
+        buf.write("\7\16\2\2\66\67\7\30\2\2\67D\7\17\2\289\f\6\2\29:\7\r")
+        buf.write("\2\2:;\7\20\2\2;<\7\30\2\2<D\7\17\2\2=>\f\5\2\2>?\7\r")
+        buf.write("\2\2?@\7\30\2\2@A\7\21\2\2AB\7\30\2\2BD\7\17\2\2C$\3\2")
         buf.write("\2\2C\'\3\2\2\2C*\3\2\2\2C-\3\2\2\2C/\3\2\2\2C\61\3\2")
         buf.write("\2\2C\63\3\2\2\2C8\3\2\2\2C=\3\2\2\2DG\3\2\2\2EC\3\2\2")
         buf.write("\2EF\3\2\2\2F\5\3\2\2\2GE\3\2\2\2HM\5\b\5\2IJ\7\25\2\2")
@@ -63,7 +63,7 @@ class RegExpParser ( Parser ):
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "IDENTIFIER", 
-                      "TYPEDVAR", "NUMBER", "WS" ]
+                      "TYPEDVAR", "CONSTANT", "NATURAL", "FLOATING", "WS" ]
 
     RULE_namedExpr = 0
     RULE_expr = 1
@@ -96,8 +96,10 @@ class RegExpParser ( Parser ):
     T__17=18
     IDENTIFIER=19
     TYPEDVAR=20
-    NUMBER=21
-    WS=22
+    CONSTANT=21
+    NATURAL=22
+    FLOATING=23
+    WS=24
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -392,8 +394,8 @@ class RegExpParser ( Parser ):
         def expr(self):
             return self.getTypedRuleContext(RegExpParser.ExprContext,0)
 
-        def NUMBER(self):
-            return self.getToken(RegExpParser.NUMBER, 0)
+        def NATURAL(self):
+            return self.getToken(RegExpParser.NATURAL, 0)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterRestrictGT" ):
@@ -422,11 +424,11 @@ class RegExpParser ( Parser ):
         def expr(self):
             return self.getTypedRuleContext(RegExpParser.ExprContext,0)
 
-        def NUMBER(self, i:int=None):
+        def NATURAL(self, i:int=None):
             if i is None:
-                return self.getTokens(RegExpParser.NUMBER)
+                return self.getTokens(RegExpParser.NATURAL)
             else:
-                return self.getToken(RegExpParser.NUMBER, i)
+                return self.getToken(RegExpParser.NATURAL, i)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterRestrict" ):
@@ -506,8 +508,8 @@ class RegExpParser ( Parser ):
         def expr(self):
             return self.getTypedRuleContext(RegExpParser.ExprContext,0)
 
-        def NUMBER(self):
-            return self.getToken(RegExpParser.NUMBER, 0)
+        def NATURAL(self):
+            return self.getToken(RegExpParser.NATURAL, 0)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterRestrictLT" ):
@@ -563,7 +565,7 @@ class RegExpParser ( Parser ):
             self.state = 32
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [RegExpParser.IDENTIFIER, RegExpParser.TYPEDVAR, RegExpParser.NUMBER]:
+            if token in [RegExpParser.IDENTIFIER, RegExpParser.TYPEDVAR, RegExpParser.CONSTANT]:
                 localctx = RegExpParser.AtomicContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
@@ -712,7 +714,7 @@ class RegExpParser ( Parser ):
                         self.state = 51
                         self.match(RegExpParser.T__11)
                         self.state = 52
-                        localctx.u = self.match(RegExpParser.NUMBER)
+                        localctx.u = self.match(RegExpParser.NATURAL)
                         self.state = 53
                         self.match(RegExpParser.T__12)
                         pass
@@ -730,7 +732,7 @@ class RegExpParser ( Parser ):
                         self.state = 56
                         self.match(RegExpParser.T__13)
                         self.state = 57
-                        localctx.l = self.match(RegExpParser.NUMBER)
+                        localctx.l = self.match(RegExpParser.NATURAL)
                         self.state = 58
                         self.match(RegExpParser.T__12)
                         pass
@@ -746,11 +748,11 @@ class RegExpParser ( Parser ):
                         self.state = 60
                         self.match(RegExpParser.T__10)
                         self.state = 61
-                        localctx.l = self.match(RegExpParser.NUMBER)
+                        localctx.l = self.match(RegExpParser.NATURAL)
                         self.state = 62
                         self.match(RegExpParser.T__14)
                         self.state = 63
-                        localctx.u = self.match(RegExpParser.NUMBER)
+                        localctx.u = self.match(RegExpParser.NATURAL)
                         self.state = 64
                         self.match(RegExpParser.T__12)
                         pass
@@ -924,8 +926,8 @@ class RegExpParser ( Parser ):
             super().__init__(parser)
             self.copyFrom(ctx)
 
-        def NUMBER(self):
-            return self.getToken(RegExpParser.NUMBER, 0)
+        def CONSTANT(self):
+            return self.getToken(RegExpParser.CONSTANT, 0)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterConstant" ):
@@ -1019,7 +1021,7 @@ class RegExpParser ( Parser ):
                 localctx = RegExpParser.ConstantContext(self, localctx)
                 self.enterOuterAlt(localctx, 3)
                 self.state = 82
-                self.match(RegExpParser.NUMBER)
+                self.match(RegExpParser.CONSTANT)
                 pass
 
 

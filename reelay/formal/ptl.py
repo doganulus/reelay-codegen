@@ -14,7 +14,7 @@ class PastTLBuilder(PastTLVisitor):
     def __init__(self):
         super().__init__()
         self.states = list()
-        self.meta = dict(name='name', bnum=0, tnum=0, vars=set(), funcs=set())
+        self.meta = dict(name='name', bnum=0, tnum=0, vars=set(), funcs=set(),output=None)
 
     def build(self, expr):
 

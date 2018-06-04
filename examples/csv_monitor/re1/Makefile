@@ -1,13 +1,14 @@
 CC=g++
 CFLAGS=-o monitor -O2 -pthread -std=c++11 
 
-REGEXP="p2;p1+"
+PATTERN="p2;p1+"
+# PATTERN="p2;p1+"
 
 all: generate
 	$(CC) $(CFLAGS) main.cpp 
 
 generate:
-	re2cpp --with-headers $(REGEXP)
+	re2cpp --with-headers $(PATTERN)
 
 test:
 	./monitor example.csv

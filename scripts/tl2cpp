@@ -5,6 +5,9 @@ import sys
 import antlr4
 import argparse
 
+import shutil 
+import pkg_resources
+
 from reelay.formal.ptl import PastTLBuilder as Builder
 from reelay.target.cpp import StructGenerator
 
@@ -32,8 +35,8 @@ def main(argv):
     # Args processing
 
     args = parser.parse_args()
-    expr = args.pattern
-    outdir = args.output
+    expr = args.PATTERN
+    outdir = args.outdir
 
     # Code Generation
 
