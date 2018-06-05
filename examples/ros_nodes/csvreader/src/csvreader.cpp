@@ -2,7 +2,7 @@
 
 #include "ros/ros.h"
 #include "std_msgs/Float64.h"
-#include "geometry_msgs/Vector3.msg"
+#include "geometry_msgs/Vector3.h"
 
 #include "csv.h"
 
@@ -47,12 +47,12 @@ int main(int argc, char **argv)
    * than we can send them, the number here specifies how many messages to
    * buffer up before throwing some away.
    */
-  ros::Publisher pub = n.advertise<geometry_msgs::Vector3>("xyz", 1);
+  ros::Publisher pub = n.advertise<geometry_msgs::Vector3>("GyroData", 1);
 
   /**
    * Sets CSV
    */
-  io::CSVReader<3> reader("../data.csv");
+  io::CSVReader<3> reader("/mnt/c/Users/Dogan/Dropbox/Research/dev/catkin/data/ins.csv");
   reader.read_header(io::ignore_extra_column, "roll", "yaw", "pitch");
   float roll, yaw, pitch;
 
@@ -72,11 +72,13 @@ int main(int argc, char **argv)
     /**
      * This is a message object. You stuff it with data, and then publish it.
      */
-    std_msgs::Float64 msg;
+    geometry_msgs::Vector3 msg;
     reader.read_row(roll, yaw, pitch);
-    msg.data = yaw;
+    msg.x = yaw;
+    msg.y = roll;
+    msg.z = pitch;
 
-    ROS_INFO("%f", msg.data);
+    ROS_INFO("%f %f %f", msg.x, msg.y, msg.z);
 
     /**
      * The publish() function is how you send messages. The parameter
