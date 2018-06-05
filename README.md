@@ -10,19 +10,19 @@ The easiest way to install `reelay` is to run the following command (that requir
 
     pip install git+https://github.com/doganulus/reelay.git
 
-Additionally compiling generated code additionally requires `boost` software libraries installed on your system.
+Compiling generated code requires a `C++11` compatible compiler and `Boost C++` libraries installed on your system.
 
 # usage
 
 `reelay` provides two command-line scripts, `re2cpp` and `tl2cpp` to generate `C++` classes that correspond to regular expression and temporal logic PATTERNs, respectively. 
 
-    re2cpp [-h] [--with-headers] PATTERN  
-    tl2cpp [-h] [--with-headers] PATTERN
+    re2cpp [-h] [--with-headers] PATTERN [--outdir DIR]
+    tl2cpp [-h] [--with-headers] PATTERN [--outdir DIR]
      
     Optional Arguments:
      
     -h              show the help message
-    --outdir        specify a directory for generated files
+    --outdir        set the name of directory for generated files
     --with-headers  generate code with required headers
 
 [Syntax reference for Regular Expressions](https://github.com/doganulus/reelay/blob/master/docs/regexp.md) 
