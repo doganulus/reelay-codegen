@@ -15,7 +15,7 @@ struct MonitorExprHandler:MonitorExpr {
 
   void callback(const geometry_msgs::Vector3 &msg){
 
-    this->update(msg.x, msg.y);
+    this->update(msg.x);
     
     msgout.data = this->output();
     ROS_INFO("%d", msgout.data);
