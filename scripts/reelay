@@ -1,0 +1,156 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import antlr4
+import argparse
+
+import shutil 
+import pkg_resources
+
+import yaml
+
+from reelay.target.cpp import StructGenerator
+from reelay.target.ros import RosNodeGenerator
+
+def main(argv):
+
+    sys.argv = argv
+
+    parser = argparse.ArgumentParser(description='reelay generates a monitor code in C++ from formal specifications', formatter_class=argparse.RawTextHelpFormatter)
+
+    parser.add_argument(
+        'spec', 
+        help='''Monitor Specification''')
+
+    parser.add_argument(
+        '--name',
+        help='Overrides the name in the spec',
+        )
+
+    parser.add_argument(
+        '--lang',
+        help='Overrides the pattern language in the spec',
+        )
+
+    parser.add_argument(
+        '--pattern',
+        help='Overrides the pattern in the spec',
+        )
+
+    parser.add_argument(
+        '--output-dir',
+        help='Overrides the output directory in the spec',
+        )
+
+    parser.add_argument(
+        '--no-ros',
+        action="store_true",
+        help='Enables the monitor generation for ROS if defined',
+        default = False
+        )
+
+    parser.add_argument(
+        '--with-headers',
+        action="store_true",
+        help='Enables the monitor generation for ROS if defined',
+        default = False
+        )
+
+    args = parser.parse_args()
+
+    config_file = args.spec
+    with open(config_file) as f:
+        cfg = yaml.load(f)
+
+        try:
+            name = cfg['name'] if args.name == None else args.name
+        except KeyError:
+            print("ERROR: No NAME is specified.")
+
+        try:
+            pattern = cfg['pattern'] if args.pattern == None else args.pattern
+        except KeyError:
+            print("ERROR: No PATTERN is specified.")
+
+        try:
+            lang = cfg['lang'] if args.lang == None else args.lang
+        except KeyError:
+            print("ERROR: No LANG is specified.")
+
+        try:
+            output_dir = cfg['output_dir'] if args.output_dir == None else args.output_dir
+        except KeyError:
+            output_dir = ''
+
+        ros_enabled = not args.no_ros
+        with_headers = args.with_headers
+
+        if lang.lower() in ["temporal", "tl", "ltl", "ptl", "pasttl", "pastltl"]:
+            from reelay.formal.ptl import PastTLBuilder as Builder
+        elif lang.lower() in ["regexp", "re", "reg", "regex"]:
+            from reelay.formal.regexp import RegExpBuilder as Builder
+        else:
+            print("ERROR: LANG should be either regexp or temporal.")
+
+
+        builder = Builder()
+        states, meta = builder.build(pattern)
+
+        # Ugly! To be changed.
+        meta['name'] = name
+        # meta['vars'] = sorted(list(meta['vars']))
+    
+        monitor_coder = StructGenerator()
+        monitor_code = monitor_coder.generate(states, meta) 
+
+        monitor_file = os.path.join(output_dir, 'Monitor{}.hpp'.format(name))
+        with open(monitor_file, 'w') as f:
+            f.write(monitor_code)
+
+        if with_headers:
+
+            resource = pkg_resources.resource_filename('reelay', '../cpp/common.hpp')
+            shutil.copyfile(resource, os.path.join(output_dir, 'common.hpp'))
+
+            resource = pkg_resources.resource_filename('reelay', '../cpp/discrete_time.hpp')
+            shutil.copyfile(resource, os.path.join(output_dir, 'discrete_time.hpp'))
+
+        if ros_enabled and 'ros' in cfg:
+            ros_node_coder = RosNodeGenerator(name, cfg['ros'])
+            ros_node_code = ros_node_coder.generate(states, meta) 
+            # print(ros_node_code)
+
+            rosnode_file = os.path.join(output_dir, 'Node{}.cpp'.format(name))
+            with open(rosnode_file, 'w') as f:
+                f.write(ros_node_code)
+
+
+if __name__ == '__main__':
+    # main(sys.argv)
+
+    main(["reelay", "../examples/ros_nodes/spec.yaml", "--output-dir", "/mnt/c/Users/Dogan/Dropbox/Research/dev/catkin/src/new_monitor", "--with-headers"])
+
+
+
+#     document = """
+# --- # Monitor Specification
+# name : "Expr"
+# lang : "temporal"
+# pattern : "always[>=40](lt(yaw:double, 5.5) and lt(roll:double , 5.5) and lt(pitch:double , 5.5))"
+# include : ["blabla.h"]
+# with_headers : true
+# output_dir : "."
+# ros:
+#   input_topic: "GyroData"
+#   output_topic: "ExprHolds"
+#   message_type: "geometry_msgs::Twist"
+#   include : ["geometry_msgs/Twist.h"]
+#   assign: 
+#     yaw  : "angular.x"
+#     roll : "angular.y" 
+#     pitch: "angular.z"
+#     """ 
+#     cfg = yaml.load(document)
+
+#     print(cfg['ros']['assign'])
