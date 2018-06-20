@@ -11,6 +11,8 @@ import pkg_resources
 from reelay.formal.regexp import RegExpBuilder as Builder
 from reelay.target.cpp import StructGenerator
 
+# comment
+
 def main(argv):
 
     parser = argparse.ArgumentParser(description='reelay generates some C++ code that matches the regular expression given', formatter_class=argparse.RawTextHelpFormatter)

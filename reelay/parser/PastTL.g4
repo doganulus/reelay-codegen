@@ -40,7 +40,7 @@ idlist : IDENTIFIER (',' IDENTIFIER)*;
 
 IDENTIFIER : [a-zA-Z][_a-zA-Z0-9]*;
 
-TYPEDVAR : IDENTIFIER ':' ('bool' | 'int' | 'float' | 'double' | 'string'); 
+TYPEDVAR : IDENTIFIER ':' ('bool' | 'int' | 'int32' |  'float' | 'float64' | 'double' | 'string' ); 
 
 
 CONSTANT
