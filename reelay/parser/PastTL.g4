@@ -10,17 +10,17 @@ expr : child=binded_atom                                            # Atomic
      | left=expr ('->' | 'implies') right=expr                      # Implication
      | 'pre' child=expr                                             # Previous
      | 'once' child=expr                                            # Once
-     | 'once' '[' '>=' l=CONSTANT ']' child=expr                    # TimedOnceGT
-     | 'once' '[' '<=' u=CONSTANT ']' child=expr                    # TimedOnceLT
-     | 'once' '[' l=CONSTANT ',' u=CONSTANT ']' child=expr           # TimedOnce
+     | 'once' '[' '>=' l=NATURAL ']' child=expr                    # TimedOnceGT
+     | 'once' '[' '<=' u=NATURAL ']' child=expr                    # TimedOnceLT
+     | 'once' '[' l=NATURAL ',' u=NATURAL ']' child=expr           # TimedOnce
      | 'always' child=expr                                          # Always
-     | 'always' '[' '>=' l=CONSTANT ']' child=expr                # TimedAlwaysGT
-     | 'always' '[' '<=' u=CONSTANT ']' child=expr                # TimedAlwaysLT
-     | 'always' '[' l=CONSTANT ',' u=CONSTANT ']' child=expr      # TimedAlways
+     | 'always' '[' '>=' l=NATURAL ']' child=expr                # TimedAlwaysGT
+     | 'always' '[' '<=' u=NATURAL ']' child=expr                # TimedAlwaysLT
+     | 'always' '[' l=NATURAL ',' u=NATURAL ']' child=expr      # TimedAlways
      | left=expr 'since' right=expr                                 # Since     
-     | left=expr 'since' '[' '>=' l=CONSTANT ']' right=expr        # TimedSinceGT
-     | left=expr 'since' '[' '<=' u=CONSTANT ']' right=expr        # TimedSinceLT
-     | left=expr 'since' '[' l=CONSTANT ',' u=CONSTANT ']' right=expr #TimedSince
+     | left=expr 'since' '[' '>=' l=NATURAL ']' right=expr        # TimedSinceGT
+     | left=expr 'since' '[' '<=' u=NATURAL ']' right=expr        # TimedSinceLT
+     | left=expr 'since' '[' l=NATURAL ',' u=NATURAL ']' right=expr #TimedSince
      | '(' child=expr ')'                                           # Grouping
      ;
 
@@ -42,38 +42,31 @@ IDENTIFIER : [a-zA-Z][_a-zA-Z0-9]*;
 
 TYPEDVAR : IDENTIFIER ':' ('bool' | 'int' | 'int32' |  'float' | 'float64' | 'double' | 'string' ); 
 
+CONSTANT : SIGN? NATURAL | SIGN? FLOATING; 
 
-CONSTANT
-    :   NATURAL
-    |   FLOATING
-    ;
-
-fragment
 NATURAL
-    :   DIGIT_NOT_ZERO DIGIT*
+    :   DIGITS
     ;
 
-fragment
 FLOATING
     :   FRACTIONALCONSTANT EXPONENTPART?
-    |   DIGITSEQUENCE EXPONENTPART 
+    |   DIGITS EXPONENTPART 
     ;
 
 fragment
 FRACTIONALCONSTANT
-    :   DIGITSEQUENCE? '.' DIGITSEQUENCE
-    |   DIGITSEQUENCE '.'
+    :   DIGITS? '.' DIGITS
+    |   DIGITS '.'
     ;
 
 fragment
 EXPONENTPART
-    :   'e' SIGN? DIGITSEQUENCE
-    |   'E' SIGN? DIGITSEQUENCE
+    :   'e' SIGN? DIGITS
+    |   'E' SIGN? DIGITS
     ;
 
 fragment SIGN : '+' | '-';
-fragment DIGITSEQUENCE : DIGIT+;
+fragment DIGITS : DIGIT+;
 fragment DIGIT : ('0'..'9');
-fragment DIGIT_NOT_ZERO : ('1'..'9');
 
 WS: [ \r\n\t]+ -> channel (HIDDEN);

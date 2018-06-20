@@ -33,37 +33,33 @@ idlist : IDENTIFIER (',' IDENTIFIER)*;
 
 IDENTIFIER : [a-zA-Z][_a-zA-Z0-9]*;
 
-TYPEDVAR : IDENTIFIER ':' ('bool' | 'int' | 'float' | 'double' | 'string'); 
+TYPEDVAR : IDENTIFIER ':' ('bool' | 'int' | 'int32' |  'float' | 'float64' | 'double' | 'string' ); 
 
-CONSTANT
-    :   NATURAL
-    |   FLOATING
-    ;
+CONSTANT : SIGN? NATURAL | SIGN? FLOATING; 
 
 NATURAL
-    :   DIGIT_NOT_ZERO DIGIT*
+    :   DIGITS
     ;
 
 FLOATING
     :   FRACTIONALCONSTANT EXPONENTPART?
-    |   DIGITSEQUENCE EXPONENTPART 
+    |   DIGITS EXPONENTPART 
     ;
 
 fragment
 FRACTIONALCONSTANT
-    :   DIGITSEQUENCE? '.' DIGITSEQUENCE
-    |   DIGITSEQUENCE '.'
+    :   DIGITS? '.' DIGITS
+    |   DIGITS '.'
     ;
 
 fragment
 EXPONENTPART
-    :   'e' SIGN? DIGITSEQUENCE
-    |   'E' SIGN? DIGITSEQUENCE
+    :   'e' SIGN? DIGITS
+    |   'E' SIGN? DIGITS
     ;
 
 fragment SIGN : '+' | '-';
-fragment DIGITSEQUENCE : DIGIT+;
+fragment DIGITS : DIGIT+;
 fragment DIGIT : ('0'..'9');
-fragment DIGIT_NOT_ZERO : ('1'..'9');
 
 WS: [ \r\n\t]+ -> channel (HIDDEN);
