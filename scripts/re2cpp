@@ -28,7 +28,7 @@ def main(argv):
 
     parser.add_argument(
         '-o',
-        '--output',
+        '--outdir',
         help='Specify the output directory',
         default=''
         )
