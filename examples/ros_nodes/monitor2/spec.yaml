@@ -1,0 +1,15 @@
+---
+name : "Expr2"
+lang : "regexp"
+pattern : "lt(yaw:double, 5.5) ; lt(roll:double, 5.5) ; lt(pitch:double, 5.5)"
+include : []
+with_headers : true
+ros:
+  topic_input: "GyroData"
+  topic_output: "Expr2"
+  message_type: "geometry_msgs::Twist"
+  include : ["geometry_msgs/Twist.h"]
+  assign: 
+    yaw  : "angular.x"
+    roll : "angular.y" 
+    pitch: "angular.z"
