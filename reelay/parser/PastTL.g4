@@ -10,17 +10,17 @@ expr : child=binded_atom                                            # Atomic
      | left=expr ('->' | 'implies') right=expr                      # Implication
      | 'pre' child=expr                                             # Previous
      | 'once' child=expr                                            # Once
-     | 'once' '[' '>=' l=NATURAL ']' child=expr                    # TimedOnceGT
-     | 'once' '[' '<=' u=NATURAL ']' child=expr                    # TimedOnceLT
-     | 'once' '[' l=NATURAL ',' u=NATURAL ']' child=expr           # TimedOnce
+     | 'once' '[' '>=' l=NUMBER ']' child=expr                    # TimedOnceGT
+     | 'once' '[' '<=' u=NUMBER ']' child=expr                    # TimedOnceLT
+     | 'once' '[' l=NUMBER ',' u=NUMBER ']' child=expr           # TimedOnce
      | 'always' child=expr                                          # Always
-     | 'always' '[' '>=' l=NATURAL ']' child=expr                # TimedAlwaysGT
-     | 'always' '[' '<=' u=NATURAL ']' child=expr                # TimedAlwaysLT
-     | 'always' '[' l=NATURAL ',' u=NATURAL ']' child=expr      # TimedAlways
+     | 'always' '[' '>=' l=NUMBER ']' child=expr                # TimedAlwaysGT
+     | 'always' '[' '<=' u=NUMBER ']' child=expr                # TimedAlwaysLT
+     | 'always' '[' l=NUMBER ',' u=NUMBER ']' child=expr      # TimedAlways
      | left=expr 'since' right=expr                                 # Since     
-     | left=expr 'since' '[' '>=' l=NATURAL ']' right=expr        # TimedSinceGT
-     | left=expr 'since' '[' '<=' u=NATURAL ']' right=expr        # TimedSinceLT
-     | left=expr 'since' '[' l=NATURAL ',' u=NATURAL ']' right=expr #TimedSince
+     | left=expr 'since' '[' '>=' l=NUMBER ']' right=expr        # TimedSinceGT
+     | left=expr 'since' '[' '<=' u=NUMBER ']' right=expr        # TimedSinceLT
+     | left=expr 'since' '[' l=NUMBER ',' u=NUMBER ']' right=expr #TimedSince
      | '(' child=expr ')'                                           # Grouping
      ;
 
@@ -30,7 +30,7 @@ binded_atom : child=atom                         # VarConst
 
 atom : name=(TYPEDVAR | IDENTIFIER)                    # Prop
      | name=(TYPEDVAR | IDENTIFIER) '(' args=alist ')' # Pred
-     | CONSTANT                                        # Constant
+     | NUMBER                                          # Constant
      ;
 
 alist : atom (',' atom)*                # AtomList
@@ -38,16 +38,16 @@ alist : atom (',' atom)*                # AtomList
 
 idlist : IDENTIFIER (',' IDENTIFIER)*;
 
-IDENTIFIER : [a-zA-Z][_a-zA-Z0-9]*;
+IDENTIFIER : [_a-zA-Z][_a-zA-Z0-9]*;
 
 TYPEDVAR : IDENTIFIER ':' ('bool' | 'int' | 'int32' |  'float' | 'float64' | 'double' | 'string' ); 
 
-CONSTANT : SIGN? NATURAL | SIGN? FLOATING; 
+NUMBER : SIGN? NATURAL | SIGN? FLOATING; 
 
-NATURAL
-    :   DIGITS
-    ;
+fragment
+NATURAL : ZERO | DIGIT_NON_ZERO DIGIT*;
 
+fragment
 FLOATING
     :   FRACTIONALCONSTANT EXPONENTPART?
     |   DIGITS EXPONENTPART 
@@ -68,5 +68,7 @@ EXPONENTPART
 fragment SIGN : '+' | '-';
 fragment DIGITS : DIGIT+;
 fragment DIGIT : ('0'..'9');
+fragment DIGIT_NON_ZERO : ('0'..'9');
+fragment ZERO : '0';
 
 WS: [ \r\n\t]+ -> channel (HIDDEN);

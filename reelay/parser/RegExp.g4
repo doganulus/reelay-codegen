@@ -10,9 +10,9 @@ expr : child=binded_atom                          # Atomic
      | child=expr '?'                             # Question
      | left=expr ';' right=expr                   # Concatenation
      | left=expr '&' right=expr                   # Intersection
-     | child=expr '[' '<=' u=NATURAL ']'          # RestrictLT
-     | child=expr '[' '>=' l=NATURAL ']'          # RestrictGT
-     | child=expr '[' l=NATURAL ',' u=NATURAL ']' # Restrict
+     | child=expr '[' '<=' u=NUMBER ']'          # RestrictLT
+     | child=expr '[' '>=' l=NUMBER ']'          # RestrictGT
+     | child=expr '[' l=NUMBER ',' u=NUMBER ']' # Restrict
      | left=expr '|' right=expr                   # Union
      | '(' child=expr ')'                         # Grouping
      ;
@@ -23,7 +23,7 @@ binded_atom : child=atom                         # VarConst
 
 atom : name=(TYPEDVAR | IDENTIFIER)                    # Prop
      | name=(TYPEDVAR | IDENTIFIER) '(' args=alist ')' # Pred
-     | CONSTANT                                        # Constant
+     | NUMBER                                        # Constant
      ;
 
 alist : atom (',' atom)*                # AtomList
@@ -31,16 +31,16 @@ alist : atom (',' atom)*                # AtomList
 
 idlist : IDENTIFIER (',' IDENTIFIER)*;
 
-IDENTIFIER : [a-zA-Z][_a-zA-Z0-9]*;
+IDENTIFIER : [_a-zA-Z][_a-zA-Z0-9]*;
 
 TYPEDVAR : IDENTIFIER ':' ('bool' | 'int' | 'int32' |  'float' | 'float64' | 'double' | 'string' ); 
 
-CONSTANT : SIGN? NATURAL | SIGN? FLOATING; 
+NUMBER : SIGN? NATURAL | SIGN? FLOATING; 
 
-NATURAL
-    :   DIGITS
-    ;
+fragment
+NATURAL : ZERO | DIGIT_NON_ZERO DIGIT*;
 
+fragment
 FLOATING
     :   FRACTIONALCONSTANT EXPONENTPART?
     |   DIGITS EXPONENTPART 
@@ -61,5 +61,7 @@ EXPONENTPART
 fragment SIGN : '+' | '-';
 fragment DIGITS : DIGIT+;
 fragment DIGIT : ('0'..'9');
+fragment DIGIT_NON_ZERO : ('0'..'9');
+fragment ZERO : '0';
 
 WS: [ \r\n\t]+ -> channel (HIDDEN);

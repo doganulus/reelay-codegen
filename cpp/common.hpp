@@ -1,16 +1,16 @@
-template <class T>
-bool lt(T value, T threshold){
+template <class V, class T>
+bool lt(V value, T threshold){
     return value < threshold;
 }
-template <class T>
-bool leq(T value, T threshold){
+template <class V, class T>
+bool leq(V value, T threshold){
     return value <= threshold;
 }
-template <class T>
-bool gt(T value, T threshold){
+template <class V, class T>
+bool gt(V value, T threshold){
     return value > threshold;
 }
-template <class T>
-bool geq(T value, T threshold){
+template <class V, class T>
+bool geq(V value, T threshold){
     return value >= threshold;
 }

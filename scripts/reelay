@@ -20,71 +20,89 @@ def main(argv):
     parser = argparse.ArgumentParser(description='reelay generates a monitor code in C++ from formal specifications', formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument(
-        'spec', 
-        help='''Monitor Specification''')
+        'spec_file', 
+        help='''specify the monitor in YAML format''')
 
     parser.add_argument(
         '--name',
-        help='Overrides the name in the spec',
+        help='override the name in the spec.',
         )
 
     parser.add_argument(
         '--lang',
-        help='Overrides the pattern language in the spec',
+        help='override the pattern language in the spec. (regexp or temporal)',
         )
 
     parser.add_argument(
         '--pattern',
-        help='Overrides the pattern in the spec',
+        help='override the pattern in the spec.',
         )
 
     parser.add_argument(
         '--output-dir',
-        help='Overrides the output directory in the spec',
+        help='override the output directory in the spec.',
+        )
+
+    parser.add_argument(
+        '--include',
+        help='override include files in the spec.',
         )
 
     parser.add_argument(
         '--no-ros',
         action="store_true",
-        help='Enables the monitor generation for ROS if defined',
+        help='disable ROS node generation id defined in the spec.',
         default = False
         )
 
     parser.add_argument(
         '--with-headers',
         action="store_true",
-        help='Enables the monitor generation for ROS if defined',
+        help='copy necessary C++ header files.',
         default = False
         )
 
     args = parser.parse_args()
 
-    config_file = args.spec
+    config_file = args.spec_file
     with open(config_file) as f:
         cfg = yaml.load(f)
 
         try:
             name = cfg['name'] if args.name == None else args.name
         except KeyError:
-            print("ERROR: No NAME is specified.")
+            print("No NAME is specified.")
+            sys.exit()
 
         try:
             pattern = cfg['pattern'] if args.pattern == None else args.pattern
         except KeyError:
-            print("ERROR: No PATTERN is specified.")
+            print("No PATTERN is specified.")
+            sys.exit()
 
         try:
             lang = cfg['lang'] if args.lang == None else args.lang
         except KeyError:
-            print("ERROR: No LANG is specified.")
+            print("No LANG is specified in the input file.")
+            sys.exit()
 
         try:
             output_dir = cfg['output_dir'] if args.output_dir == None else args.output_dir
         except KeyError:
             output_dir = ''
 
+        try:
+            include = cfg['include'] if args.include == None else args.include
+        except KeyError:
+            include = []
+
+        try:
+            with_headers = cfg['with_headers']
+        except KeyError:
+            with_headers = args.with_headers
+
+
         ros_enabled = not args.no_ros
-        with_headers = args.with_headers
 
         if lang.lower() in ["temporal", "tl", "ltl", "ptl", "pasttl", "pastltl"]:
             from reelay.formal.ptl import PastTLBuilder as Builder
@@ -101,8 +119,10 @@ def main(argv):
         meta['name'] = name
         # meta['vars'] = sorted(list(meta['vars']))
     
-        monitor_coder = StructGenerator()
+        monitor_coder = StructGenerator(include=include)
         monitor_code = monitor_coder.generate(states, meta) 
+
+        # print(monitor_code)
 
         monitor_file = os.path.join(output_dir, 'Monitor{}.hpp'.format(name))
         with open(monitor_file, 'w') as f:
@@ -117,19 +137,22 @@ def main(argv):
             shutil.copyfile(resource, os.path.join(output_dir, 'discrete_time.hpp'))
 
         if ros_enabled and 'ros' in cfg:
-            ros_node_coder = RosNodeGenerator(name, cfg['ros'])
-            ros_node_code = ros_node_coder.generate(states, meta) 
+
+            ros_node_coder = RosNodeGenerator(states, meta, cfg['ros'])
+            ros_node_code = ros_node_coder.generate() 
             # print(ros_node_code)
 
             rosnode_file = os.path.join(output_dir, 'Node{}.cpp'.format(name))
             with open(rosnode_file, 'w') as f:
                 f.write(ros_node_code)
 
+            # print(ros_node_code)
+
 
 if __name__ == '__main__':
-    # main(sys.argv)
+    main(sys.argv)
 
-    main(["reelay", "../examples/ros_nodes/spec.yaml", "--output-dir", "/mnt/c/Users/Dogan/Dropbox/Research/dev/catkin/src/new_monitor", "--with-headers"])
+    # main(["reelay", "../examples/ros_nodes/spec.yaml", "--output-dir", "/mnt/c/Users/Dogan/Dropbox/Research/dev/catkin/src/new_monitor", "--with-headers"])
 
 
 

@@ -95,8 +95,6 @@ class PastTLBuilder(PastTLVisitor):
     def visitNegation(self, ctx:PastTLParser.NegationContext):
         child = self.visit(ctx.child)
 
-        print(child)
-
         state = BooleanState(
             update=BooleanNot(child.output), 
             variable=self.meta['bnum']
@@ -347,3 +345,16 @@ class PastTLBuilder(PastTLVisitor):
     # Visit a parse tree produced by FirstOrderPastMTLParser#Grouping.
     def visitGrouping(self, ctx:PastTLParser.GroupingContext):
         return self.visit(ctx.child)
+
+if __name__ == '__main__':
+
+    from reelay.formal.ptl import PastTLBuilder as Builder
+    from reelay.target.cpp import StructGenerator
+    
+    builder = Builder()
+    states, meta = builder.build("lt(x,-3) since p2")
+
+    coder = StructGenerator()
+    code = coder.generate(states, meta)
+
+    print(code)

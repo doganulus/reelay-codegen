@@ -2,7 +2,7 @@
 
 #include "ros/ros.h"
 #include "std_msgs/Float64.h"
-#include "geometry_msgs/Vector3.h"
+#include "geometry_msgs/Twist.h"
 
 #include "csv.h"
 
@@ -47,38 +47,38 @@ int main(int argc, char **argv)
    * than we can send them, the number here specifies how many messages to
    * buffer up before throwing some away.
    */
-  ros::Publisher pub = n.advertise<geometry_msgs::Vector3>("GyroData", 1);
+  ros::Publisher pub = n.advertise<geometry_msgs::Twist>("GyroData", 1);
 
   /**
-   * Sets CSV
+   * Declares interested columns from the CSV file
    */
-  io::CSVReader<3> reader("/mnt/c/Users/Dogan/Dropbox/Research/dev/catkin/data/ins.csv");
-  reader.read_header(io::ignore_extra_column, "roll", "yaw", "pitch");
-  float roll, yaw, pitch;
+  io::CSVReader<6> reader("data.csv");
+  reader.read_header(io::ignore_extra_column, "velocity_north", "velocity_east", "velocity_down", "roll", "yaw", "pitch");
+
+  float vn, ve, vd, roll, yaw, pitch;
 
   /**
    * 10 Hz update
    */
   ros::Rate rate(10);
 
-  /**
-   * A count of how many messages we have sent. This is used to create
-   * a unique string for each message.
-   */
-  int count = 0;
-
   while (ros::ok())
   {
     /**
      * This is a message object. You stuff it with data, and then publish it.
      */
-    geometry_msgs::Vector3 msg;
-    reader.read_row(roll, yaw, pitch);
-    msg.x = yaw;
-    msg.y = roll;
-    msg.z = pitch;
+    geometry_msgs::Twist msg;
+    reader.read_row(vn, ve, vd, roll, yaw, pitch);
 
-    ROS_INFO("%f %f %f", msg.x, msg.y, msg.z);
+    msg.linear.x = vn;
+    msg.linear.y = ve;
+    msg.linear.z = vd;
+
+    msg.angular.x = yaw;
+    msg.angular.y = roll;
+    msg.angular.z = pitch;
+
+    ROS_INFO("Linear: %f %f %f | Angular: %f %f %f", msg.linear.x, msg.linear.y, msg.linear.z, msg.angular.x, msg.angular.y, msg.angular.z);
 
     /**
      * The publish() function is how you send messages. The parameter

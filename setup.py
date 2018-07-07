@@ -17,7 +17,7 @@ if __name__ == "__main__":
                 "reelay.machine",
                 "reelay.formal" 
             ],
-            scripts=['scripts/re2cpp', 'scripts/tl2cpp'],
+            scripts=['scripts/reelay', 'scripts/re2cpp', 'scripts/tl2cpp'],
             license='GPLv3+',
             classifiers=[
                 'Development Status :: 3 - Alpha',
@@ -32,7 +32,7 @@ if __name__ == "__main__":
             # url='http://pypi.python.org/pypi/reelay/',
             python_requires='>=3',
             install_requires=[
-                'antlr4-python3-runtime'
+                'antlr4-python3-runtime', 'pyyaml'
             ],
             include_package_data=True,
             package_data={

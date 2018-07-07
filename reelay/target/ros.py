@@ -1,18 +1,40 @@
 class RosNodeGenerator:
 
-    def __init__(self, name, roscfg):
+    def __init__(self, states=None, meta=None, roscfg=dict()):
 
-        super().__init__()
         self.statements = []
 
-        self.name = name
-        self.topic_input = roscfg['topic_input']
-        self.topic_output = roscfg['topic_output']
+        self.name = meta['name']
+        self.vars = sorted(meta['vars'])
+
+        try:
+            self.topic_input = roscfg['topic_input']
+        except KeyError:
+            print("ROS: Input topic is not specified.")
+            sys.exit()
+
+        try:
+            self.topic_output = roscfg['topic_output']
+        except KeyError:
+            print("ROS: Output topic is not specified.")
+            sys.exit()
+
+        try:
+            self.message_type = roscfg['message_type']
+        except KeyError:
+            print("ROS: Message type is not specified.")
+            sys.exit()
+
         self.assign = roscfg['assign']
-        self.message_type = roscfg['message_type']
+        for v in self.vars:
+            if v[1] not in self.assign:
+              self.assign[v[1]] = v[1]
+
+        # print(self.assign)
+
         self.include = ["ros/ros.h", "std_msgs/Bool.h"] + roscfg['include']
 
-    def generate(self, states=None, meta=None):
+    def generate(self):
 
         for library in self.include:
             self.statements.append('#include "{}"'.format(library))
@@ -31,8 +53,11 @@ class RosNodeGenerator:
         self.statements.append('')
         self.statements.append('\tvoid callback(const {msgtype} &msg)'.format(msgtype=self.message_type) + '{') 
         self.statements.append('')
-        self.statements.append('\t\tthis->update({args});'.format(args=', '.join(['msg.'+self.assign[var[1]] for var in sorted(meta['vars'])])))
+        self.statements.append('\t\tthis->update({args});'.format(args=', '.join(['msg.'+self.assign[v[1]] for v in self.vars])))
+        
         self.statements.append('\t\tmsgout.data = this->output();')
+        self.statements.append('\t\tROS_INFO("%d", msgout.data);')
+        
         self.statements.append('\t\tpub.publish(msgout);')
         self.statements.append('\t}')
         self.statements.append('};')
