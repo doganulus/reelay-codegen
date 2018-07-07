@@ -1,0 +1,5 @@
+---
+name : "Expr"
+lang : "temporal"
+pattern : "p1 since p2"
+with_headers : true

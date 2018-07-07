@@ -1,0 +1,5 @@
+---
+name : "Expr"
+lang : "regexp"
+pattern : "p2; p1+"
+with_headers : true
