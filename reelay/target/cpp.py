@@ -20,7 +20,9 @@ class StructGenerator(Visitor):
         self.pre = self.now + '_pre'
         self.tpre = self.tnow + '_pre'
 
-        self.include = ["array", "common.hpp", "discrete_time.hpp"] + include
+        # self.include = ["array", "reelay/discrete_time.hpp"] + include
+        self.include = ["array", "discrete_time.hpp"] + include
+
 
     def generate(self, states=None, meta=None):
 
@@ -31,6 +33,8 @@ class StructGenerator(Visitor):
 
         self.statements.append('')
 
+       
+        self.statements.append('template<typename T = int>')
         self.statements.append('struct Monitor{} '.format(meta['name']) + '{')
         self.statements.append('')
 
@@ -40,12 +44,12 @@ class StructGenerator(Visitor):
             self.statements.append('')
 
         if meta['tnum'] > 0:
-            self.statements.append('\tstd::array<timed_set,{size}> {name} = std::array<timed_set,{size}>{init};'.format(size=meta['tnum'], name=self.tnow, init='{' + ','.join(['timed_set()' for i in range(meta['tnum'])]) + '}'))
-            self.statements.append('\tstd::array<timed_set,{size}> {name} = std::array<timed_set,{size}>{init};'.format(size=meta['tnum'], name=self.tpre, init='{' + ','.join(['timed_set()' for i in range(meta['tnum'])]) + '}' ))
+            self.statements.append('\tstd::array<interval_set<T>,{size}> {name} = std::array<interval_set<T>,{size}>{init};'.format(size=meta['tnum'], name=self.tnow, init='{' + ','.join(['interval_set<T>()' for i in range(meta['tnum'])]) + '}'))
+            self.statements.append('\tstd::array<interval_set<T>,{size}> {name} = std::array<interval_set<T>,{size}>{init};'.format(size=meta['tnum'], name=self.tpre, init='{' + ','.join(['interval_set<T>()' for i in range(meta['tnum'])]) + '}' ))
             self.statements.append('')
 
         if meta['tnum'] > 0:
-            self.statements.append('\tint now = 0;')
+            self.statements.append('\tT now = 0;')
             self.statements.append('')
 
         # for vartype, varname in meta['vars']:
@@ -55,7 +59,7 @@ class StructGenerator(Visitor):
         # Currently this part is a hack - to be changed
         #
         update_args = ['{} {}'.format(v[0], v[1].split('.')[0]) for v in sorted(meta['vars'])]
-        self.statements.append('\tvoid update({})'.format(', '.join(update_args)) + '{') 
+        self.statements.append('\tbool update({})'.format(', '.join(update_args)) + '{') 
 
         self.statements.append('')
         
@@ -72,6 +76,8 @@ class StructGenerator(Visitor):
         for state in states:
             self.statements.append('\t\t' + "{} = {};".format(self.visit(state), self.visit(state.update)))
 
+        self.statements.append('')
+        self.statements.append('\t\treturn output();')
         self.statements.append('\t}')
         self.statements.append('')
         self.statements.append('\tbool output()' + '{')
@@ -112,17 +118,29 @@ class StructGenerator(Visitor):
         return "{}[{}]".format(self.now, obj.variable)
         # return "{} = {};".format(obj.variable, self.visit(obj.update))
 
+    def visitOnceUpdate(self, obj):
+        return "({} or {})".format(self.visit(obj.children[0]), self.visit(obj.children[1]))
+        # return "{} = {};".format(obj.variable, self.visit(obj.update))
+
+    def visitAlwaysUpdate(self, obj):
+        return "({} and {})".format(self.visit(obj.children[0]), self.visit(obj.children[1]))
+        # return "{} = {};".format(obj.variable, self.visit(obj.update))
+
+    def visitSinceUpdate(self, obj):
+        return "{} or ({} and {})".format(self.visit(obj.children[2]), self.visit(obj.children[1]), self.visit(obj.children[0]))
+        # return "{} = {};".format(obj.variable, self.visit(obj.update))
+
+    def visitTemporalOutput(self, obj):
+        return "{}".format(self.visit(obj.children[0]))
+
     def visitTimedSetSinceUpdate(self, obj):
         if obj.u != None:
-            return "update_timed_since({state}, {left}, {right}, {u}, now)".format(state=self.visit(obj.children[0]), left=self.visit(obj.children[1]), right=self.visit(obj.children[2]), u=obj.u)
+            return "update_timed_since<T>({state}, now, {left}, {right}, {l}, {u})".format(state=self.visit(obj.children[0]), left=self.visit(obj.children[1]), right=self.visit(obj.children[2]), l=obj.l, u=obj.u)
         else:
-            return "update_timed_since_unbounded({state}, {left}, {right}, {l}, now)".format(state=self.visit(obj.children[0]), left=self.visit(obj.children[1]), right=self.visit(obj.children[2]), l=obj.l) 
+            return "update_timed_since_unbounded<T>({state}, now, {left}, {right}, {l})".format(state=self.visit(obj.children[0]), left=self.visit(obj.children[1]), right=self.visit(obj.children[2]), l=obj.l) 
 
     def visitTimedSetSinceOutput(self, obj):
-        if obj.l != None:
-            return "output_timed_since({state}, {l}, now)".format(state=self.visit(obj.children[0]), l=obj.l)
-        else:
-            return "output_timed_since_unbounded({state}, now)".format(state=self.visit(obj.children[0]))
+            return "output_timed_since<T>({state}, now)".format(state=self.visit(obj.children[0]))
 
     def visitTimedSetState(self, obj):
         return "{}[{}]".format(self.tnow, obj.variable)
@@ -141,7 +159,7 @@ class StructGenerator(Visitor):
 
 
 
-class StructDenseGenerator(Visitor):
+class StructGeneratorDense(Visitor):
 
     def __init__(self, include=[], atoms=dict(), now="states"):
 
@@ -149,66 +167,59 @@ class StructDenseGenerator(Visitor):
         self.statements = []
 
         self.now = now
-        self.tnow = "t" + now
-
         self.pre = self.now + '_pre'
-        self.tpre = self.tnow + '_pre'
 
-        self.type0 = "interval_set"
-        self.type1 = "zone_set"
+        # self.include = ["array", "reelay/discrete_time.hpp"] + include
+        self.include = ["array", "dense_time.hpp"] + include
 
-        self.include = ["array", "common.hpp", "dense_time.hpp"] + include
 
     def generate(self, states=None, meta=None):
 
-        # labeled_states = self.label(states)
+        self.meta = meta
 
         for library in self.include:
             self.statements.append('#include "{}"'.format(library))
 
         self.statements.append('')
 
-        self.statements.append('struct Monitor{}:DenseTimeMonitor'.format(meta['name']) + '{')
+        self.statements.append('template<typename T = int>')
+        self.statements.append('struct Monitor{} '.format(meta['name']) + '{')
         self.statements.append('')
 
-        if meta['bnum'] > 0:
-            self.statements.append('\tstd::array<{dtype},{size}> {name} = std::array<{dtype},{size}>{init};'.format(dtype=self.type0, size=meta['bnum'], name=self.now, init='{' + ','.join(['{dtype}()'.format(dtype=self.type0) for i in range(meta['bnum'])]) + '}' ))
-            self.statements.append('\tstd::array<{dtype},{size}> {name} = std::array<{dtype},{size}>{init};'.format(dtype=self.type0, size=meta['bnum'], name=self.pre, init='{' + ','.join(['{dtype}()'.format(dtype=self.type0) for i in range(meta['bnum'])]) + '}' ))
-            self.statements.append('')
+        self.meta['num'] = self.meta['bnum'] + self.meta['tnum']
 
-        if meta['tnum'] > 0:
-            self.statements.append('\tstd::array<{dtype},{size}> {name} = std::array<{dtype},{size}>{init};'.format(dtype=self.type1, size=meta['tnum'], name=self.tnow, init='{' + ','.join(['{type1}()' for i in range(meta['tnum'])]) + '}'))
-            self.statements.append('\tstd::array<{dtype},{size}> {name} = std::array<{dtype},{size}>{init};'.format(dtype=self.type1, size=meta['tnum'], name=self.tpre, init='{' + ','.join(['{type1}()' for i in range(meta['tnum'])]) + '}' ))
-            self.statements.append('')
+        self.statements.append('\tstd::array<interval_set<T>,{size}> {name} = std::array<interval_set<T>,{size}>{init};'.format(size=self.meta['num'], name=self.now, init='{' + ','.join(['interval_set<T>()' for i in range(self.meta['num'])]) + '}'))
+        self.statements.append('\tstd::array<interval_set<T>,{size}> {name} = std::array<interval_set<T>,{size}>{init};'.format(size=self.meta['num'], name=self.pre, init='{' + ','.join(['interval_set<T>()' for i in range(self.meta['num'])]) + '}' ))
+        self.statements.append('')
 
-        if meta['tnum'] > 0:
-            self.statements.append('\tint now = 0;')
-            self.statements.append('')
+        self.statements.append('\tinterval_set<T> current = interval_set<T>(interval<T>::left_open(-1, 0));')
+        self.statements.append('')
 
         # for vartype, varname in meta['vars']:
         #     self.statements.append("\t{} {};".format(vartype, varname))
         # self.statements.append('')
-
-        self.statements.append('\tvoid update(int time, {})'.format(', '.join(['{} {}'.format(v[0], v[1]) for v in sorted(meta['vars'])])) + '{') 
+        #
+        # Currently this part is a hack - to be changed
+        #
+        update_args = ['{} {}'.format(v[0], v[1].split('.')[0]) for v in sorted(self.meta['vars'])]
+        self.statements.append('\tinterval_set<T> update(T now, {})'.format(', '.join(update_args)) + '{') 
 
         self.statements.append('')
-        self.statements.append('\t\tupdate_time(time);')
-        self.statements.append('')
+        
+        self.statements.append('\t\tcurrent = interval_set<T>(interval<T>::left_open(current.begin()->upper(), now));')
 
-        if meta['bnum'] > 0:
-            self.statements.append('\t\t{pre} = {now};'.format(now=self.now, pre=self.pre))
-        if meta['tnum'] > 0:
-            self.statements.append('\t\t{pre} = {now};'.format(now=self.tnow, pre=self.tpre))
-
+        self.statements.append('\t\t{pre} = {now};'.format(now=self.now, pre=self.pre))
         self.statements.append('')
 
         for state in states:
             self.statements.append('\t\t' + "{} = {};".format(self.visit(state), self.visit(state.update)))
 
+        self.statements.append('')
+        self.statements.append('\t\treturn output();')
         self.statements.append('\t}')
         self.statements.append('')
-        self.statements.append('\tinterval_set& output()'.format(type0=self.type0) + '{')
-        self.statements.append('\t\treturn {};'.format(self.visit(meta['output'])))
+        self.statements.append('\tinterval_set<T> output()' + '{')
+        self.statements.append('\t\treturn {};'.format(self.visit(self.meta['output'])))
         self.statements.append('\t}')
         self.statements.append('};')
 
@@ -223,17 +234,20 @@ class StructDenseGenerator(Visitor):
         return "{}[{}]".format(self.pre, obj.state.variable)
 
     def visitConstant(self, obj):
-        return obj.name
+        if obj.name == "true":
+            return "current"
+        else:
+            return obj.name
 
     def visitAtom(self, obj):
         if obj.args == []:
-            return 'prop({})'.format(obj.name)
+            return 'prop(current, {})'.format(obj.name)
         else:
             str_args = [self.visit(c) for c in obj.args]
             return obj.name + '({})'.format(','.join(str_args))
 
     def visitBooleanNot(self, obj):
-        return "(this->current_interval_set - {})".format(self.visit(obj.children[0]))
+        return "(current - {})".format(self.visit(obj.children[0]))
 
     def visitBooleanOr(self, obj):
         return '(' + " + ".join([self.visit(c) for c in obj.children]) + ')'
@@ -245,18 +259,28 @@ class StructDenseGenerator(Visitor):
         return "{}[{}]".format(self.now, obj.variable)
         # return "{} = {};".format(obj.variable, self.visit(obj.update))
 
+    def visitOnceUpdate(self, obj):
+        return "update_timed_since_unbounded<T>({state}, current, current, {right}, {l})".format(state=self.visit(obj.children[0]), right=self.visit(obj.children[1]), l=0)
+
+    def visitAlwaysUpdate(self, obj):
+        return "update_timed_since_unbounded<T>({state}, current, current, {right}, {l})".format(state=self.visit(obj.children[0]), right=self.visit(obj.children[1]), l=0)
+
+    def visitSinceUpdate(self, obj):
+        return "update_timed_since_unbounded<T>({state}, current, {left}, {right}, {l})".format(state=self.visit(obj.children[0]), left=self.visit(obj.children[1]), right=self.visit(obj.children[2]), l=0)
+
+    def visitTemporalOutput(self, obj):
+            return "output_timed_since<T>({state}, current)".format(state=self.visit(obj.children[0]))
+
     def visitTimedSetSinceUpdate(self, obj):
         if obj.u != None:
-            return "update_timed_since({state}, {left}, {right}, {u}, now)".format(state=self.visit(obj.children[0]), left=self.visit(obj.children[1]), right=self.visit(obj.children[2]), u=obj.u)
+            return "update_timed_since<T>({state}, current, {left}, {right}, {l}, {u})".format(state=self.visit(obj.children[0]), left=self.visit(obj.children[1]), right=self.visit(obj.children[2]), l=obj.l, u=obj.u)
         else:
-            return "update_timed_since_unbounded({state}, {left}, {right}, {l}, now)".format(state=self.visit(obj.children[0]), left=self.visit(obj.children[1]), right=self.visit(obj.children[2]), l=obj.l) 
+            return "update_timed_since_unbounded<T>({state}, current, {left}, {right}, {l})".format(state=self.visit(obj.children[0]), left=self.visit(obj.children[1]), right=self.visit(obj.children[2]), l=obj.l) 
 
     def visitTimedSetSinceOutput(self, obj):
-        if obj.l != None:
-            return "output_timed_since({state}, {l}, now)".format(state=self.visit(obj.children[0]), l=obj.l)
-        else:
-            return "output_timed_since_unbounded({state}, now)".format(state=self.visit(obj.children[0]))
+            return "output_timed_since<T>({state}, current)".format(state=self.visit(obj.children[0]))
+
 
     def visitTimedSetState(self, obj):
-        return "{}[{}]".format(self.tnow, obj.variable)
+        return "{}[{}]".format(self.now, self.meta['bnum'] + obj.variable)
         # return "{} = {};".format(obj.variable, self.visit(obj.update))

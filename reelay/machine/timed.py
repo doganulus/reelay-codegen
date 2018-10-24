@@ -1,22 +1,28 @@
-from reelay.machine.common import Expr
+from reelay.machine.common import *
 
-class TimedSetUnion(Expr):
+class OnceUpdate(Expr):
     """docstring for Atomic"""
-    def __init__(self, *children):
+    def __init__(self, state, child):
         super().__init__()
-        self.children = children
+        self.children = [Pre(state), child]
 
-class TimedSetIntersection(Expr):
+class AlwaysUpdate(Expr):
     """docstring for Atomic"""
-    def __init__(self, *children):
+    def __init__(self, state, child):
         super().__init__()
-        self.children = children
+        self.children = [Pre(state), child]
 
-class TimedSetComplementation(Expr):
+class SinceUpdate(Expr):
     """docstring for Atomic"""
-    def __init__(self, *children):
+    def __init__(self, state, left, right):
         super().__init__()
-        self.children = children
+        self.children = [Pre(state), left, right]
+
+class TemporalOutput(Expr):
+    """docstring for Atomic"""
+    def __init__(self, state):
+        super().__init__()
+        self.children = [state]
 
 class TimedSetSinceUpdate(Expr):
     """docstring for Atomic"""
@@ -33,12 +39,6 @@ class TimedSetSinceOutput(Expr):
         self.children = [state]
         self.l = lower_bound
         self.u = upper_bound
-
-class TimedSetConstant(Expr):
-    """docstring for Atomic"""
-    def __init__(self, *children):
-        super().__init__()
-        self.children = children
 
 class TimedSetState(object):
     """docstring for Machine"""

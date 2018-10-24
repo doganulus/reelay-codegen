@@ -10,7 +10,7 @@ import pkg_resources
 
 import yaml
 
-from reelay.target.cpp import StructGenerator
+from reelay.target.cpp import StructGenerator, StructGeneratorDense
 from reelay.target.ros import RosNodeGenerator
 
 def main(argv):
@@ -35,30 +35,35 @@ def main(argv):
 
     parser.add_argument(
         '--pattern',
-        help='override the pattern in the spec.',
+        help='override the pattern in the spec',
         )
 
     parser.add_argument(
         '--output-dir',
-        help='override the output directory in the spec.',
+        help='override the output directory in the spec',
+        )
+
+    parser.add_argument(
+        '--time-model',
+        help='override the time model in the spec',
         )
 
     parser.add_argument(
         '--include',
-        help='override include files in the spec.',
+        help='override include files in the spec',
         )
 
     parser.add_argument(
         '--no-ros',
         action="store_true",
-        help='disable ROS node generation id defined in the spec.',
+        help='disable ROS node generation id defined in the spec',
         default = False
         )
 
     parser.add_argument(
         '--with-headers',
         action="store_true",
-        help='copy necessary C++ header files.',
+        help='copy necessary C++ header files',
         default = False
         )
 
@@ -92,6 +97,11 @@ def main(argv):
             output_dir = ''
 
         try:
+            time_model = cfg['time_model'] if args.time_model == None else args.time_model
+        except KeyError:
+            time_model = 'discrete'
+
+        try:
             include = cfg['include'] if args.include == None else args.include
         except KeyError:
             include = []
@@ -100,7 +110,6 @@ def main(argv):
             with_headers = cfg['with_headers']
         except KeyError:
             with_headers = args.with_headers
-
 
         ros_enabled = not args.no_ros
 
@@ -119,8 +128,14 @@ def main(argv):
         meta['name'] = name
         # meta['vars'] = sorted(list(meta['vars']))
     
-        monitor_coder = StructGenerator(include=include)
-        monitor_code = monitor_coder.generate(states, meta) 
+        if time_model == "discrete":
+            monitor_coder = StructGenerator(include=include)
+            monitor_code = monitor_coder.generate(states, meta) 
+        elif time_model == "dense":
+            monitor_coder = StructGeneratorDense(include=include)
+            monitor_code = monitor_coder.generate(states, meta) 
+        else:
+            print("ERROR: Time model should be either discrete or dense.")
 
         # print(monitor_code)
 
@@ -130,11 +145,11 @@ def main(argv):
 
         if with_headers:
 
-            resource = pkg_resources.resource_filename('reelay', '../cpp/common.hpp')
-            shutil.copyfile(resource, os.path.join(output_dir, 'common.hpp'))
-
             resource = pkg_resources.resource_filename('reelay', '../cpp/discrete_time.hpp')
             shutil.copyfile(resource, os.path.join(output_dir, 'discrete_time.hpp'))
+
+            resource = pkg_resources.resource_filename('reelay', '../cpp/dense_time.hpp')
+            shutil.copyfile(resource, os.path.join(output_dir, 'dense_time.hpp'))
 
         if ros_enabled and 'ros' in cfg:
 

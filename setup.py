@@ -28,7 +28,7 @@ if __name__ == "__main__":
                 'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
                 'Programming Language :: Python :: 3',
             ],
-            description = 'Reelay is a code generator from high-level patterns for monitoring, inspecting, and analyzing sequential data.',
+            description = 'Reelay is a code generator from high-level patterns for monitoring, inspecting, and analyzing temporal data.',
             # url='http://pypi.python.org/pypi/reelay/',
             python_requires='>=3',
             install_requires=[
@@ -39,6 +39,6 @@ if __name__ == "__main__":
                 '': ['cpp/*.h'],
                 '': ['cpp/*.hpp']
             },
-            eager_resources = ['cpp/common.hpp', 'cpp/discrete_time.hpp']
+            eager_resources = ['cpp/common.hpp', 'cpp/discrete_time.hpp', 'cpp/dense_time.hpp']
     )
 

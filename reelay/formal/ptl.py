@@ -41,14 +41,6 @@ class PastTLBuilder(PastTLVisitor):
         self.meta['name'] = name
         self.meta['output'] = child.output
 
-        # state = BooleanState(
-        #     update=child.output,
-        #     variable=self.meta['bnum']
-        #     )
-
-        # self.meta['bnum'] += 1
-        # self.states.append(state)
-
         return child
 
     def visitAtomList(self, ctx:PastTLParser.AtomListContext):
@@ -169,7 +161,9 @@ class PastTLBuilder(PastTLVisitor):
             update=None,
             variable=self.meta['bnum']
             )
-        state.update = BooleanOr(right.output, BooleanAnd(Pre(state.output), left.output))
+        # state.update = BooleanOr(right.output, BooleanAnd(Pre(state.output), left.output))
+        state.update = SinceUpdate(state, left.output, right.output)
+        state.output = TemporalOutput(state)
 
         self.meta['bnum'] += 1
         self.states.append(state)
@@ -184,8 +178,8 @@ class PastTLBuilder(PastTLVisitor):
             update=None,
             variable=self.meta['tnum']
             )
-        state.update = TimedSetSinceUpdate(state, left.output, right.output, None, int(ctx.u.text))
-        state.output = TimedSetSinceOutput(state, None, int(ctx.u.text))
+        state.update = TimedSetSinceUpdate(state, left.output, right.output, "0", ctx.u.text)
+        state.output = TimedSetSinceOutput(state)
 
         self.meta['tnum'] += 1
         self.states.append(state)
@@ -200,8 +194,8 @@ class PastTLBuilder(PastTLVisitor):
             update=None,
             variable=self.meta['tnum']
             )
-        state.update = TimedSetSinceUpdate(state, left.output, right.output, int(ctx.l.text), None)
-        state.output = TimedSetSinceOutput(state, int(ctx.l.text), None)
+        state.update = TimedSetSinceUpdate(state, left.output, right.output, ctx.l.text, None)
+        state.output = TimedSetSinceOutput(state)
 
         self.meta['tnum'] += 1
         self.states.append(state)
@@ -216,8 +210,8 @@ class PastTLBuilder(PastTLVisitor):
             update=None,
             variable=self.meta['tnum']
             )
-        state.update = TimedSetSinceUpdate(state, left.output, right.output, int(ctx.l.text), int(ctx.u.text))
-        state.output = TimedSetSinceOutput(state, int(ctx.l.text), int(ctx.u.text))
+        state.update = TimedSetSinceUpdate(state, left.output, right.output, ctx.l.text, ctx.u.text)
+        state.output = TimedSetSinceOutput(state)
 
         self.meta['tnum'] += 1
         self.states.append(state)
@@ -231,7 +225,9 @@ class PastTLBuilder(PastTLVisitor):
             update=None,
             variable=self.meta['bnum']
             )
-        state.update = BooleanAnd(Pre(state.output), child.output)
+        # state.update = BooleanAnd(Pre(state.output), child.output)
+        state.update = AlwaysUpdate(state, BooleanNot(child.output))
+        state.output = BooleanNot(TemporalOutput(state))
 
         self.meta['bnum'] += 1
         self.states.append(state)
@@ -245,8 +241,8 @@ class PastTLBuilder(PastTLVisitor):
             update=None,
             variable=self.meta['tnum']
             )
-        state.update = TimedSetSinceUpdate(state, Constant('true'), BooleanNot(child.output), None, int(ctx.u.text))
-        state.output = BooleanNot(TimedSetSinceOutput(state, None, int(ctx.u.text)))
+        state.update = TimedSetSinceUpdate(state, Constant('true'), BooleanNot(child.output), "0", ctx.u.text)
+        state.output = BooleanNot(TimedSetSinceOutput(state))
 
         self.meta['tnum'] += 1
         self.states.append(state)
@@ -260,8 +256,8 @@ class PastTLBuilder(PastTLVisitor):
             update=None,
             variable=self.meta['tnum']
             )
-        state.update = TimedSetSinceUpdate(state, Constant('true'), BooleanNot(child.output), int(ctx.l.text), None)
-        state.output = BooleanNot(TimedSetSinceOutput(state, int(ctx.l.text), None))
+        state.update = TimedSetSinceUpdate(state, Constant('true'), BooleanNot(child.output), ctx.l.text, None)
+        state.output = BooleanNot(TimedSetSinceOutput(state))
 
         self.meta['tnum'] += 1
         self.states.append(state)
@@ -275,8 +271,8 @@ class PastTLBuilder(PastTLVisitor):
             update=None,
             variable=self.meta['tnum']
             )
-        state.update = TimedSetSinceUpdate(state, Constant('true'), BooleanNot(child.output), int(ctx.l.text), int(ctx.u.text))
-        state.output = BooleanNot(TimedSetSinceOutput(state, int(ctx.l.text), int(ctx.u.text)))
+        state.update = TimedSetSinceUpdate(state, Constant('true'), BooleanNot(child.output), ctx.l.text, ctx.u.text)
+        state.output = BooleanNot(TimedSetSinceOutput(state))
 
         self.meta['tnum'] += 1
         self.states.append(state)
@@ -290,7 +286,9 @@ class PastTLBuilder(PastTLVisitor):
             update=None,
             variable=self.meta['bnum']
             )
-        state.update = BooleanOr(Pre(state.output), child.output)
+        # state.update = BooleanOr(Pre(state.output), child.output)
+        state.update = OnceUpdate(state, child.output)
+        state.output = TemporalOutput(state)
 
         self.meta['bnum'] += 1
         self.states.append(state)
@@ -304,8 +302,8 @@ class PastTLBuilder(PastTLVisitor):
             update=None,
             variable=self.meta['tnum']
             )
-        state.update = TimedSetSinceUpdate(state, Constant('true'), child.output, None, int(ctx.u.text))
-        state.output = TimedSetSinceOutput(state, None, int(ctx.u.text))
+        state.update = TimedSetSinceUpdate(state, Constant('true'), child.output, 0, ctx.u.text)
+        state.output = TimedSetSinceOutput(state)
 
         self.meta['tnum'] += 1
         self.states.append(state)
@@ -319,8 +317,8 @@ class PastTLBuilder(PastTLVisitor):
             update=None,
             variable=self.meta['tnum']
             )
-        state.update = TimedSetSinceUpdate(state, Constant('true'), child.output, int(ctx.l.text), None)
-        state.output = TimedSetSinceOutput(state, int(ctx.l.text), None)
+        state.update = TimedSetSinceUpdate(state, Constant('true'), child.output, ctx.l.text, None)
+        state.output = TimedSetSinceOutput(state)
 
         self.meta['tnum'] += 1
         self.states.append(state)
@@ -334,8 +332,8 @@ class PastTLBuilder(PastTLVisitor):
             update=None,
             variable=self.meta['tnum']
             )
-        state.update = TimedSetSinceUpdate(state, Constant('true'), child.output, int(ctx.l.text), int(ctx.u.text))
-        state.output = TimedSetSinceOutput(state, int(ctx.l.text), int(ctx.u.text))
+        state.update = TimedSetSinceUpdate(state, Constant('true'), child.output, ctx.l.text, ctx.u.text)
+        state.output = TimedSetSinceOutput(state)
 
         self.meta['tnum'] += 1
         self.states.append(state)

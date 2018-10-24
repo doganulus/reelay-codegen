@@ -2,7 +2,7 @@ Temporal Logic Syntax:
   
     Expr == Atom                    (Atomic Expression)
 
-         :: Expr1 *                 (Negation)
+         :: !Expr1                  (Negation)
          :: Expr1 || Expr2          (Disjunction)
          :: Expr1 && Expr2          (Conjunction)
          :: Expr1 -> Expr2          (Implies)

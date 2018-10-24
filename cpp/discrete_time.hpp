@@ -1,42 +1,66 @@
 #include <boost/icl/interval.hpp>
 #include <boost/icl/interval_set.hpp>
 
-typedef boost::icl::interval<int> interval;
-typedef boost::icl::interval_set<int> timed_set;
+using namespace boost::icl;
 
-timed_set& update_timed_since(timed_set& tstate, bool p1, bool p2, int upper, int now){
+template<typename T = int>
+interval_set<T>& update_timed_since(interval_set<T>& state, T now, bool p1, bool p2, T lower, T upper){
    
-    if(p2){
-        tstate = tstate.add(now) - interval::open(0, now-upper);
-    } else if(p1 and !boost::icl::is_empty(tstate)){
-        tstate = tstate - interval::open(0, now-upper);
+    if(p1 and p2){
+        state = state.add(interval<T>::closed(now+lower, now+upper));
+        state = state - interval_set<T>(interval<T>::right_open(0, now));
+    } else if(!p1 and p2){
+        state = interval_set<T>(interval<T>::closed(now+lower, now+upper));
+    } else if(p1 and !p2){
+        // state = state - interval_set<T>(interval<T>::right_open(0, now));
     } else {
-        tstate = timed_set();
+        state = interval_set<T>();
     }
 
-    return tstate;
+    return state;
 }
 
-timed_set& update_timed_since_unbounded(timed_set& tstate,  bool p1, bool p2, int lower, int now){
+template<typename T = int>
+interval_set<T>& update_timed_since_unbounded(interval_set<T>& state, T now, bool p1, bool p2, T lower){
    
-    if(p2){
-        tstate = tstate.add(now);
-    } else if(!p1 or boost::icl::is_empty(tstate)){
-        tstate = timed_set();
+    if(p1 and p2){
+        state = state.add(interval<T>::closed(now+lower, std::numeric_limits<T>::max()));
+        state = state - interval_set<T>(interval<T>::right_open(0, now));
+    } else if(!p1 and p2){
+        state = interval_set<T>(interval<T>::closed(now+lower, std::numeric_limits<T>::max()));
+    } else if(p1 and !p2){
+        // state = state - interval_set<T>(interval<T>::right_open(0, now));
+    } else {
+        state = interval_set<T>();
     }
 
-    if(!boost::icl::is_empty(tstate - interval::left_open(now-lower, now))){
-        tstate = tstate + interval::left_open(0, now-lower);
-    }
-
-    return tstate;
+    return state;
 }
 
-bool output_timed_since(timed_set& tstate, int lower, int now){
-    return !boost::icl::is_empty(tstate - interval::left_open(now-lower, now));
+template<typename T = int>
+bool output_timed_since(interval_set<T>& state, T now){
+    return contains(state, now);
 }
 
-bool output_timed_since_unbounded(timed_set& tstate, int now){
-    return !boost::icl::is_empty(tstate);
+
+/*
+ * Predicates over Real-Valued Signals
+ */
+
+template <class V, class T>
+bool lt(V value, T threshold){
+    return value < threshold;
+}
+template <class V, class T>
+bool leq(V value, T threshold){
+    return value <= threshold;
+}
+template <class V, class T>
+bool gt(V value, T threshold){
+    return value > threshold;
+}
+template <class V, class T>
+bool geq(V value, T threshold){
+    return value >= threshold;
 }
 
