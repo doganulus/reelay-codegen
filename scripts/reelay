@@ -143,13 +143,13 @@ def main(argv):
         with open(monitor_file, 'w') as f:
             f.write(monitor_code)
 
-        if with_headers:
+        # if with_headers:
 
-            resource = pkg_resources.resource_filename('reelay', '../cpp/discrete_time.hpp')
-            shutil.copyfile(resource, os.path.join(output_dir, 'discrete_time.hpp'))
+        #     resource = pkg_resources.resource_filename('reelay', '../cpp/discrete_time.hpp')
+        #     shutil.copyfile(resource, os.path.join(output_dir, 'discrete_time.hpp'))
 
-            resource = pkg_resources.resource_filename('reelay', '../cpp/dense_time.hpp')
-            shutil.copyfile(resource, os.path.join(output_dir, 'dense_time.hpp'))
+        #     resource = pkg_resources.resource_filename('reelay', '../cpp/dense_time.hpp')
+        #     shutil.copyfile(resource, os.path.join(output_dir, 'dense_time.hpp'))
 
         if ros_enabled and 'ros' in cfg:
 
