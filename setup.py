@@ -15,9 +15,10 @@ if __name__ == "__main__":
                 "reelay.parser",
                 "reelay.target",
                 "reelay.machine",
-                "reelay.formal" 
+                "reelay.formal", 
+                "reelay.benchgen",
             ],
-            scripts=['scripts/reelay'],
+            scripts=['scripts/reelay', 'scripts/reelay_benchgen'],
             license='GPLv3+',
             classifiers=[
                 'Development Status :: 3 - Alpha',

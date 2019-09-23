@@ -8,7 +8,7 @@
 
 The easiest way to install `reelay` is to run the following command (assuming `git` installed). 
 
-    pip3 install git+https://github.com/doganulus/reelay.git
+    pip install git+https://github.com/doganulus/reelay.git
 
 Compiling generated code further requires a `C++14` compatible compiler and `Boost C++` libraries installed on your system.
 
@@ -84,8 +84,9 @@ Note that this extension is particularly useful to detect patterns over temporal
 
 `reelay` package includes two example applications to monitor (1) CSV files and (2) data streams of Robot Operating System (ROS). These applications can be found in `examples` folder.
 
+# naming
 
-
+The name `reelay` comes from relay circuits as initially I lay down regular expressions (REs) into sequential circuits. Then I have applied a distortion effect to the pronouncation.
 
 
 
