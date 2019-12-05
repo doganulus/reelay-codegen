@@ -152,7 +152,7 @@ class RegExpBuilder(RegExpVisitor):
             name = 'Expr'
 
         self.meta['name'] = name
-        self.meta['output'] = ctx.output
+        self.meta['output'] = BooleanOr(ctx.output, ctx.nullable)
 
     def visitAtomList(self, ctx:RegExpParser.AtomListContext):
         uncomma = [child for child in ctx.children if child.getText() != ',']

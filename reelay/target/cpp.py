@@ -105,6 +105,12 @@ class StructGenerator(Visitor):
             str_args = [self.visit(c) for c in obj.args]
             return obj.name + '({})'.format(','.join(str_args))
 
+    def visitbool(self, obj):
+        if obj:
+            return "true"
+        else:
+            return "false"
+
     def visitBooleanNot(self, obj):
         return "not({})".format(self.visit(obj.children[0]))
 
