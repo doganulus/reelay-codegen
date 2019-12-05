@@ -126,9 +126,15 @@ class StructGenerator(Visitor):
         return "({} and {})".format(self.visit(obj.children[0]), self.visit(obj.children[1]))
         # return "{} = {};".format(obj.variable, self.visit(obj.update))
 
+    def visitPreviousUpdate(self, obj):
+        return "{}".format(self.visit(obj.children[1]))
+
     def visitSinceUpdate(self, obj):
         return "{} or ({} and {})".format(self.visit(obj.children[2]), self.visit(obj.children[1]), self.visit(obj.children[0]))
         # return "{} = {};".format(obj.variable, self.visit(obj.update))
+
+    def visitPreviousOutput(self, obj):
+        return "{}".format(self.visit(obj.children[0]))
 
     def visitTemporalOutput(self, obj):
         return "{}".format(self.visit(obj.children[0]))
