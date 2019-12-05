@@ -71,7 +71,7 @@ def main(argv):
 
     config_file = args.spec_file
     with open(config_file) as f:
-        cfg = yaml.load(f)
+        cfg = yaml.safe_load(f)
 
         try:
             name = cfg['name'] if args.name == None else args.name
@@ -189,6 +189,6 @@ if __name__ == '__main__':
 #     roll : "angular.y" 
 #     pitch: "angular.z"
 #     """ 
-#     cfg = yaml.load(document)
+#     cfg = yaml.safe_load(document)
 
 #     print(cfg['ros']['assign'])
