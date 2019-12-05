@@ -143,10 +143,11 @@ class PastTLBuilder(PastTLVisitor):
         child = self.visit(ctx.child)
 
         state = BooleanState(
-            update=child.output, 
+            update=None,
             variable=self.meta['bnum']
             )
-        state.output=Pre(state)
+        state.update = PreviousUpdate(state, child.output)
+        state.output = PreviousOutput(state)
 
         self.meta['bnum'] += 1
         self.states.append(state)

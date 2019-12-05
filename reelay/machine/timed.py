@@ -1,5 +1,11 @@
 from reelay.machine.common import *
 
+class PreviousUpdate(Expr):
+    """docstring for Atomic"""
+    def __init__(self, state, child):
+        super().__init__()
+        self.children = [Pre(state), child]
+
 class OnceUpdate(Expr):
     """docstring for Atomic"""
     def __init__(self, state, child):
@@ -17,6 +23,12 @@ class SinceUpdate(Expr):
     def __init__(self, state, left, right):
         super().__init__()
         self.children = [Pre(state), left, right]
+
+class PreviousOutput(Expr):
+    """docstring for Atomic"""
+    def __init__(self, state):
+        super().__init__()
+        self.children = [Pre(state)]
 
 class TemporalOutput(Expr):
     """docstring for Atomic"""
